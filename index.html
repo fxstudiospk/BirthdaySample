@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For Avinash</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #F9F5FF;
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+    }
+
+    h1 {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 30px;
+      color: #8E44AD;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 70vh;
+      position: relative;
+      z-index: 1;
+    }
+
+    .password-box {
+      display: flex;
+      align-items: center;
+      border: 2px solid #8E44AD;
+      border-radius: 8px;
+      padding: 10px;
+      width: 250px;
+      background: white;
+    }
+
+    .password-box input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 16px;
+    }
+
+    .lock-icon {
+      margin-left: 8px;
+      font-size: 18px;
+      color: #8E44AD;
+    }
+
+    .error {
+      margin-top: 10px;
+      font-size: 16px;
+      color: red;
+      display: none;
+      font-weight: bold;
+    }
+
+    .continue-btn {
+      margin-top: 20px;
+      background: #8E44AD;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.3s ease;
+    }
+
+    .continue-btn:hover {
+      background: #732d91;
+    }
+
+    /* Falling emojis */
+    .emoji {
+      position: absolute;
+      top: -50px;
+      font-size: 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>This website is created for Avinash</h1>
+
+  <div class="container">
+    <div class="password-box">
+      <input type="password" id="password" placeholder="Enter Password" />
+      <span class="lock-icon">🔒</span>
+    </div>
+    <div id="error" class="error">Wrong Password 💔</div>
+    <button class="continue-btn" onclick="checkPassword()">
+      Continue ➡️ ❤️
+    </button>
+  </div>
+
+  <script>
+    const correctPassword = "sample25";
+
+    function checkPassword() {
+      const password = document.getElementById("password").value;
+      const errorDiv = document.getElementById("error");
+
+      if (password === correctPassword) {
+        errorDiv.style.display = "none";
+        window.location.href = "heart.html";
+      } else {
+        errorDiv.style.display = "block";
+      }
+    }
+
+    // Falling emojis (💕 🌺)
+    const emojis = ["💕", "🌺"];
+    function createEmoji() {
+      const emoji = document.createElement("div");
+      emoji.classList.add("emoji");
+      emoji.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+      emoji.style.left = Math.random() * window.innerWidth + "px";
+      document.body.appendChild(emoji);
+
+      let position = -50;
+      const fallSpeed = Math.random() * 2 + 2;
+
+      function fall() {
+        position += fallSpeed;
+        emoji.style.top = position + "px";
+
+        if (position > window.innerHeight) {
+          emoji.remove();
+        } else {
+          requestAnimationFrame(fall);
+        }
+      }
+      fall();
+    }
+
+    setInterval(createEmoji, 500);
+  </script>
+</body>
+</html>
