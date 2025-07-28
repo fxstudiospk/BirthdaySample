@@ -7,7 +7,7 @@
   <style>
     body {
       margin: 0;
-      background: #F9F5FF; /* First page background */
+      background: #F9F5FF;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -27,9 +27,7 @@
       letter-spacing: 2px;
     }
 
-    canvas {
-      display: block;
-    }
+    canvas { display: block; }
 
     #continueBtn {
       position: absolute;
@@ -48,20 +46,17 @@
       align-items: center;
       gap: 8px;
     }
-
-    #continueBtn:hover {
-      background: #732d91;
-    }
+    #continueBtn:hover { background: #732d91; }
   </style>
 </head>
 <body>
   <h1>VISUAL REPRESENTATION OF HOW YOU COMPLETE ME</h1>
   <canvas id="canvas"></canvas>
-  <button id="continueBtn">→ Continue</button>
+  <button id="continueBtn">Continue →</button>
 
   <script>
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
 
     let width = window.innerWidth;
     let height = window.innerHeight;
@@ -69,24 +64,36 @@
     canvas.height = height;
 
     const particles = [];
-    const numParticles = 1500;  // More particles for full heart fill
-    let heartPoints = [];
+    const heartPoints = [];
+    const numParticles = 2000; // dense fill
+    const scale = 14; // heart size smaller
 
-    // Heart equation check (to fill inside)
-    function isInsideHeart(x, y) {
-      const nx = (x - width / 2) / 15;
-      const ny = -(y - height / 2) / 15;
-      return Math.pow(nx * nx + ny * ny - 1, 3) - nx * nx * ny * ny * ny < 0;
-    }
-
+    // Generate heart outline points
     function generateHeartPoints() {
-      heartPoints = [];
-      const size = 12; // Smaller size for heart
-      for (let x = width / 2 - 120; x < width / 2 + 120; x += size) {
-        for (let y = height / 2 - 120; y < height / 2 + 120; y += size) {
-          if (isInsideHeart(x, y)) {
-            heartPoints.push({ x, y });
-          }
+      heartPoints.length = 0;
+      for (let t = 0; t < Math.PI * 2; t += 0.05) {
+        const x = 16 * Math.pow(Math.sin(t), 3);
+        const y =
+          13 * Math.cos(t) -
+          5 * Math.cos(2 * t) -
+          2 * Math.cos(3 * t) -
+          Math.cos(4 * t);
+        heartPoints.push({
+          x: x * scale + width / 2,
+          y: -y * scale + height / 2,
+        });
+      }
+
+      // Random fill inside
+      while (heartPoints.length < numParticles) {
+        const tx = (Math.random() - 0.5) * 32;
+        const ty = (Math.random() - 0.5) * 32;
+        const eq = Math.pow(tx * tx + ty * ty - 1, 3) - tx * tx * ty * ty * ty;
+        if (eq < 0) {
+          heartPoints.push({
+            x: tx * scale + width / 2,
+            y: -ty * scale + height / 2,
+          });
         }
       }
     }
@@ -102,12 +109,10 @@
         this.color = "#e63946";
         this.speed = 0.05 + Math.random() * 0.03;
       }
-
       update() {
         this.x += (this.target.x - this.x) * this.speed;
         this.y += (this.target.y - this.y) * this.speed;
       }
-
       draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -116,12 +121,9 @@
       }
     }
 
-    for (let i = 0; i < numParticles; i++) {
-      particles.push(new Particle());
-    }
+    for (let i = 0; i < numParticles; i++) particles.push(new Particle());
 
     let formingHeart = false;
-
     function animate() {
       ctx.clearRect(0, 0, width, height);
       for (let p of particles) {
@@ -130,17 +132,16 @@
       }
       requestAnimationFrame(animate);
     }
-
     animate();
 
     setTimeout(() => {
       formingHeart = true;
       setTimeout(() => {
-        document.getElementById('continueBtn').style.opacity = 1;
+        document.getElementById("continueBtn").style.opacity = 1;
       }, 2500);
     }, 2000);
 
-    window.addEventListener('resize', () => {
+    window.addEventListener("resize", () => {
       width = window.innerWidth;
       height = window.innerHeight;
       canvas.width = width;
