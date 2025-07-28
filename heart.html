@@ -7,7 +7,7 @@
   <style>
     body {
       margin: 0;
-      background: linear-gradient(135deg, #fceabb, #f8b500); /* Pehle page jaisa look */
+      background: #F9F5FF; /* First page background */
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -44,6 +44,9 @@
       opacity: 0;
       cursor: pointer;
       transition: opacity 1s ease, background 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     #continueBtn:hover {
@@ -66,19 +69,25 @@
     canvas.height = height;
 
     const particles = [];
-    const numParticles = 600;  // Pehle 300 tha, ab double kiya
+    const numParticles = 1500;  // More particles for full heart fill
     let heartPoints = [];
 
-    // Function to generate heart shape points (smaller size)
+    // Heart equation check (to fill inside)
+    function isInsideHeart(x, y) {
+      const nx = (x - width / 2) / 15;
+      const ny = -(y - height / 2) / 15;
+      return Math.pow(nx * nx + ny * ny - 1, 3) - nx * nx * ny * ny * ny < 0;
+    }
+
     function generateHeartPoints() {
       heartPoints = [];
-      for (let t = 0; t < Math.PI * 2; t += 0.03) {
-        const x = 16 * Math.pow(Math.sin(t), 3);
-        const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
-        heartPoints.push({
-          x: x * 15 + width / 2, // 20 se 15 kiya -> chhota heart
-          y: -y * 15 + height / 2
-        });
+      const size = 12; // Smaller size for heart
+      for (let x = width / 2 - 120; x < width / 2 + 120; x += size) {
+        for (let y = height / 2 - 120; y < height / 2 + 120; y += size) {
+          if (isInsideHeart(x, y)) {
+            heartPoints.push({ x, y });
+          }
+        }
       }
     }
 
@@ -89,7 +98,7 @@
         this.x = Math.random() * width;
         this.y = Math.random() * height;
         this.target = heartPoints[Math.floor(Math.random() * heartPoints.length)];
-        this.size = 2.5;  // Thoda chhota particle, zyada smooth
+        this.size = 2;
         this.color = "#e63946";
         this.speed = 0.05 + Math.random() * 0.03;
       }
@@ -124,10 +133,8 @@
 
     animate();
 
-    // Delay before forming heart
     setTimeout(() => {
       formingHeart = true;
-      // Show continue button after animation settles
       setTimeout(() => {
         document.getElementById('continueBtn').style.opacity = 1;
       }, 2500);
