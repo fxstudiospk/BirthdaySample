@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Birthday Letter</title>
+  <style>
+    body {
+      margin: 0;
+      background: #F9F5FF;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    /* Initial prompt */
+    #prompt {
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    #prompt:hover {
+      transform: scale(1.1);
+    }
+    #prompt span {
+      display: block;
+      font-size: 20px;
+      color: black;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+    #prompt .emoji {
+      font-size: 100px;
+    }
+
+    /* Letter container */
+    #letterContainer {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      animation: fadeIn 1s ease forwards;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: scale(0.8);}
+      to {opacity: 1; transform: scale(1);}
+    }
+
+    /* Letter style */
+    .letter {
+      background: #f5f0e1;
+      width: 80%;
+      max-width: 500px;
+      padding: 40px;
+      border: 2px solid #d2b48c;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      font-family: 'Dancing Script', cursive;
+      font-size: 22px;
+      color: #5a4635;
+      position: relative;
+      overflow: hidden;
+      border-radius: 5px;
+    }
+
+    /* Continue button */
+    .continue-btn {
+      margin-top: 30px;
+      padding: 12px 25px;
+      font-size: 18px;
+      background: linear-gradient(90deg, #8E44AD, #9B59B6);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      animation: fadeInBtn 1s ease forwards;
+      animation-delay: 4s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: transform 0.2s ease;
+    }
+    .continue-btn:hover {
+      transform: scale(1.05);
+    }
+    @keyframes fadeInBtn {
+      to {opacity: 1;}
+    }
+
+    /* Typing effect */
+    .typing {
+      white-space: pre-wrap;
+      border-right: 3px solid #5a4635;
+      animation: blink 0.7s infinite;
+    }
+    @keyframes blink {
+      50% {border-color: transparent;}
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Initial Click Prompt -->
+  <div id="prompt">
+    <span>CLICK TO REVEAL</span>
+    <div class="emoji">💌</div>
+  </div>
+
+  <!-- Letter + Continue Button -->
+  <div id="letterContainer">
+    <div class="letter" id="letterText"></div>
+    <button class="continue-btn" onclick="window.location.href='nextpage.html'">
+      Continue →
+    </button>
+  </div>
+
+  <script>
+    const prompt = document.getElementById('prompt');
+    const letterContainer = document.getElementById('letterContainer');
+    const letterTextEl = document.getElementById('letterText');
+
+    const message = `Dear Avinash,
+
+On this special day, I send you wishes wrapped with love and joy.
+May your year ahead be filled with laughter, unforgettable moments, and endless happiness.
+
+Here’s to more dreams, more smiles, and more beautiful days like today.
+
+Happy 20th Birthday!`;
+
+    prompt.addEventListener('click', () => {
+      prompt.style.display = 'none';
+      letterContainer.style.display = 'flex';
+      typeMessage(message, letterTextEl);
+    });
+
+    function typeMessage(text, element) {
+      let index = 0;
+      const interval = setInterval(() => {
+        element.textContent = text.slice(0, index);
+        index++;
+        if(index > text.length) {
+          clearInterval(interval);
+          element.classList.remove('typing');
+        }
+      }, 40);
+      element.classList.add('typing');
+    }
+  </script>
+
+</body>
+</html>
