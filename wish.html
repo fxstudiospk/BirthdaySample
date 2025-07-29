@@ -92,16 +92,12 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      opacity: 0;
-      animation: fadeIn 2s ease forwards 2s;
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
       transition: transform 0.2s ease;
+      opacity: 1; /* instantly visible */
     }
     .continue-btn:hover {
       transform: translateX(-50%) scale(1.05);
-    }
-    @keyframes fadeIn {
-      to { opacity: 1; }
     }
 
     canvas {
@@ -120,7 +116,7 @@
   <div class="cake">🎂</div>
 
   <!-- Continue Button -->
-  <button class="continue-btn" id="continueBtn">
+  <button class="continue-btn" onclick="window.location.href='letter.html'">
     Continue →
   </button>
 
@@ -136,11 +132,6 @@
       div.textContent = char === " " ? "" : char;
       bannerContainer.appendChild(div);
     }
-
-    // Redirect button
-    document.getElementById('continueBtn').addEventListener('click', () => {
-      window.location.href = "letter.html";
-    });
 
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
