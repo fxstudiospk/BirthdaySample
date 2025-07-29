@@ -119,6 +119,11 @@
       document.getElementById("continueBtn").style.opacity = 1;
     }, 2500);
 
+    // Redirect on button click
+    document.getElementById("continueBtn").addEventListener("click", () => {
+      window.location.href = "wish.html";
+    });
+
     window.addEventListener("resize", () => {
       width = window.innerWidth;
       height = window.innerHeight;
