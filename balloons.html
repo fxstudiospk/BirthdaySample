@@ -14,6 +14,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      user-select: none;
     }
 
     /* Top Title */
@@ -28,7 +29,6 @@
       text-shadow: 2px 2px 6px rgba(0,0,0,0.2);
       font-family: 'Playfair Display', serif;
       letter-spacing: 2px;
-      user-select: none;
     }
 
     /* Balloon styling */
@@ -37,18 +37,17 @@
       bottom: -200px;
       left: 50%;
       transform: translateX(-50%);
-      width: 130px; /* bigger size */
-      height: 160px; /* bigger size */
+      width: 130px; /* increased size */
+      height: 160px; /* increased size */
       border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
       color: white;
-      font-size: 30px; /* same size as before */
+      font-size: 30px; /* same font size */
       font-weight: bold;
       cursor: pointer;
       transition: transform 0.3s ease, opacity 0.3s ease;
-      user-select: none; /* disable text selection */
     }
     .balloon:after {
       content: '';
@@ -83,7 +82,6 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       opacity: 0;
       transition: opacity 0.5s ease;
-      user-select: none;
     }
     .message-box.show { opacity: 1; }
 
@@ -95,8 +93,9 @@
       font-family: 'Playfair Display', serif;
       font-weight: bold;
       color: #5a4635;
+      transition: opacity 0.8s ease;
     }
-    .end-sequence.show { opacity: 1; transition: opacity 0.8s ease; }
+    .end-sequence.show { opacity: 1; }
 
     .end-happy { font-size: 50px; top: 35%; }
     .end-birthday { font-size: 40px; top: 45%; }
@@ -163,17 +162,17 @@
     let currentIndex = 0;
 
     function showBalloon() {
-      if(currentIndex >= 20) { showEndSequence(); return; }
-      balloon.style.display = 'flex'; // ensure visible for each balloon
+      if (currentIndex >= 20) { 
+        showEndSequence(); 
+        return; 
+      }
+      balloon.style.display = 'flex';
       balloon.style.background = colors[Math.floor(Math.random() * colors.length)];
       balloon.textContent = currentIndex+1;
 
-      // reset position before animation
       balloon.style.bottom = '-200px';
       balloon.classList.remove('float-up');
       void balloon.offsetWidth; // force reflow
-
-      // start animation
       balloon.classList.add('float-up');
     }
 
@@ -188,13 +187,11 @@
         balloon.classList.remove('pop');
         currentIndex++;
         showBalloon();
-      }, 2000);
+      }, 1000);
     });
 
     function showEndSequence(){
-      // balloon ko completely hide karo
-      balloon.style.display = 'none';
-
+      balloon.style.display = 'none'; // Balloon hide after 20 pops
       setTimeout(()=> happy.classList.add('show'), 200);
       setTimeout(()=> birthday.classList.add('show'), 700);
       setTimeout(()=> name.classList.add('show'), 1200);
