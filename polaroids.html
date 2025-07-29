@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Memories We Hold Together</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #f9f4ef;
+      color: #5a4a3b;
+    }
+    h1 {
+      text-align: center;
+      font-family: 'Dancing Script', cursive;
+      font-size: 3rem;
+      color: #6a4e93;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+      margin-top: 40px;
+      animation: fadeInDown 1.5s ease;
+    }
+    .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      max-width: 1100px;
+      margin: 50px auto;
+      padding: 20px;
+      gap: 40px;
+    }
+    .text-section {
+      flex: 1;
+      min-width: 300px;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      animation: fadeInLeft 1.5s ease;
+    }
+    .image-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      align-items: center;
+      animation: fadeInRight 1.5s ease;
+    }
+    .polaroid {
+      background: white;
+      padding: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: transform 0.4s ease;
+    }
+    .polaroid img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+    .polaroid:hover {
+      transform: scale(1.05) rotate(1deg);
+    }
+    .first {
+      transform: rotate(-3deg);
+    }
+    .second {
+      transform: rotate(3deg);
+    }
+    .continue-btn {
+      display: block;
+      margin: 40px auto;
+      padding: 12px 30px;
+      background: #6a4e93;
+      color: white;
+      border: none;
+      font-size: 1.2rem;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+    .continue-btn:hover {
+      background: #533b75;
+      transform: translateY(-3px);
+    }
+
+    /* Animations */
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInLeft {
+      from { opacity: 0; transform: translateX(-30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes fadeInRight {
+      from { opacity: 0; transform: translateX(30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        text-align: center;
+      }
+      .text-section, .image-section {
+        animation: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>THE MEMORIES WE HOLD TOGETHER</h1>
+  <div class="container">
+    <div class="text-section">
+      <p><em>"A snapshot of joy,<br>
+      where laughter meets love<br>
+      and time stands still."</em></p>
+      <p><em>"Moments wrapped in warmth,<br>
+      painted in the hues of memories<br>
+      we hold forever."</em></p>
+    </div>
+
+    <div class="image-section">
+      <div class="polaroid first">
+        <img src="first.jpeg" alt="First Memory">
+      </div>
+      <div class="polaroid second">
+        <img src="second.jpeg" alt="Second Memory">
+      </div>
+    </div>
+  </div>
+
+  <button class="continue-btn" onclick="window.location.href='pola.html'">
+    Continue →
+  </button>
+
+</body>
+</html>
