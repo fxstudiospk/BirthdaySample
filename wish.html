@@ -3,68 +3,77 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Happy Birthday Avinash</title>
+  <title>Happy Birthday</title>
   <style>
     body {
       margin: 0;
       background: #F9F5FF;
       overflow: hidden;
-      font-family: 'Arial', sans-serif;
+      font-family: Arial, sans-serif;
     }
 
-    /* Top Banner */
-    #banner {
-      position: absolute;
+    /* Zig-Zag Banner */
+    .banner {
+      position: fixed;
       top: 0;
       width: 100%;
-      text-align: center;
-      font-size: 32px;
-      font-weight: bold;
-      color: #8E44AD;
-      padding: 15px 0;
-      animation: slide 10s linear infinite;
+      height: 80px;
+      background: #8E44AD;
+      clip-path: polygon(0 0, 100% 0, 100% 70%, 95% 100%, 85% 70%, 75% 100%, 65% 70%, 55% 100%, 45% 70%, 35% 100%, 25% 70%, 15% 100%, 5% 70%, 0 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: bannerMove 10s ease-in-out infinite alternate;
+      z-index: 10;
+    }
+    .banner h1 {
+      color: #FFD700;
+      font-size: 30px;
+      text-shadow: 0 0 10px #fff, 0 0 20px #FFD700;
+    }
+    @keyframes bannerMove {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-30px); }
     }
 
-    @keyframes slide {
-      0% {transform: translateX(100%);}
-      100% {transform: translateX(-100%);}
-    }
-
-    /* Cake */
-    #cake {
+    /* Cake Emoji */
+    .cake {
       position: absolute;
+      font-size: 150px;
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
-      width: 220px;
-      height: auto;
-    }
-    
-    /* Candle Age */
-    #age {
-      position: absolute;
-      left: 50%;
-      top: 38%;
-      transform: translateX(-50%);
-      font-size: 40px;
-      font-weight: bold;
-      color: gold;
-      text-shadow: 0 0 10px #FFD700;
+      text-shadow: 0 0 15px rgba(0,0,0,0.2);
+      z-index: 5;
     }
 
-    /* Sparkles */
+    /* Age with glow */
+    .age {
+      position: absolute;
+      top: calc(50% - 120px);
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 80px;
+      font-weight: bold;
+      color: #FFD700;
+      text-shadow: 0 0 15px #FFD700, 0 0 30px #FFA500, 0 0 45px #FFD700;
+      z-index: 6;
+    }
+
+    /* Sparkles around age */
     .sparkle {
       position: absolute;
-      width: 6px;
-      height: 6px;
-      background: gold;
+      width: 8px;
+      height: 8px;
+      background: #FFD700;
       border-radius: 50%;
       animation: sparkleAnim 1s linear infinite;
+      z-index: 7;
     }
     @keyframes sparkleAnim {
-      0% {transform: scale(1) translateY(0); opacity: 1;}
-      50% {transform: scale(1.5) translateY(-10px); opacity: 0.5;}
-      100% {transform: scale(1) translateY(0); opacity: 1;}
+      0% { transform: scale(1) translateY(0); opacity: 1; }
+      50% { transform: scale(1.5) translateY(-10px); opacity: 0.5; }
+      100% { transform: scale(1) translateY(0); opacity: 1; }
     }
 
     canvas {
@@ -75,19 +84,15 @@
   </style>
 </head>
 <body>
-  <!-- Banner -->
-  <div id="banner">Happy Birthday Avinash</div>
-
-  <!-- Cake -->
-  <img id="cake" src="https://i.ibb.co/7kQtjXg/cake.png" alt="Cake" />
-  <div id="age">20</div>
+  <div class="banner"><h1>Happy Birthday Avinash</h1></div>
+  <div class="age">20</div>
+  <div class="cake">🎂</div>
 
   <!-- Sparkles -->
-  <div class="sparkle" style="left: 50%; top: 37%; animation-delay:0s;"></div>
-  <div class="sparkle" style="left: 48%; top: 36%; animation-delay:0.2s;"></div>
-  <div class="sparkle" style="left: 52%; top: 36%; animation-delay:0.4s;"></div>
+  <div class="sparkle" style="left:50%; top:35%; animation-delay:0s;"></div>
+  <div class="sparkle" style="left:48%; top:37%; animation-delay:0.2s;"></div>
+  <div class="sparkle" style="left:52%; top:37%; animation-delay:0.4s;"></div>
 
-  <!-- Canvas for Balloons & Confetti -->
   <canvas id="canvas"></canvas>
 
   <script>
@@ -99,52 +104,81 @@
     canvas.height = height;
 
     const balloons = [];
-    const confetti = [];
+    const ribbons = [];
 
-    const balloonColors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'];
-    const confettiColors = ['#ff0', '#0f0', '#f0f', '#0ff', '#f00', '#00f'];
+    const balloonColors = ['#FF6384','#36A2EB','#FFCE56','#4BC0C0','#9966FF','#FF9F40'];
+    const ribbonColors = ['#FF5733','#33FF57','#3357FF','#F333FF','#33FFF2','#FFD133'];
 
     class Balloon {
       constructor() {
         this.x = Math.random() * width;
-        this.y = height + Math.random() * 200;
-        this.size = 30 + Math.random() * 20;
+        this.y = height + 100;
+        this.size = 40 + Math.random() * 20;
         this.color = balloonColors[Math.floor(Math.random() * balloonColors.length)];
-        this.speed = 1 + Math.random() * 2;
+        this.speed = 1 + Math.random();
+        this.angle = Math.random() * Math.PI * 2;
       }
       draw() {
+        // Balloon body
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.scale(1, 1.2);
         ctx.beginPath();
-        ctx.ellipse(this.x, this.y, this.size * 0.6, this.size, 0, 0, Math.PI * 2);
+        ctx.ellipse(0, 0, this.size * 0.6, this.size, 0, 0, Math.PI * 2);
         ctx.fillStyle = this.color;
         ctx.fill();
+        // Highlight
+        ctx.beginPath();
+        ctx.arc(-this.size * 0.2, -this.size * 0.3, this.size * 0.15, 0, Math.PI*2);
+        ctx.fillStyle = "rgba(255,255,255,0.5)";
+        ctx.fill();
+        ctx.restore();
+
+        // Tail
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y + this.size);
+        ctx.lineTo(this.x - 5, this.y + this.size + 10);
+        ctx.lineTo(this.x + 5, this.y + this.size + 10);
         ctx.closePath();
+        ctx.fillStyle = this.color;
+        ctx.fill();
       }
       update() {
         this.y -= this.speed;
-        if (this.y + this.size < 0) {
-          this.y = height + Math.random() * 100;
+        this.x += Math.sin(this.angle) * 0.3;
+        this.angle += 0.02;
+        if (this.y + this.size < -50) {
+          this.y = height + 50;
           this.x = Math.random() * width;
         }
         this.draw();
       }
     }
 
-    class ConfettiPiece {
+    class Ribbon {
       constructor() {
         this.x = Math.random() * width;
         this.y = Math.random() * -height;
-        this.size = 5 + Math.random() * 5;
-        this.color = confettiColors[Math.floor(Math.random() * confettiColors.length)];
-        this.speed = 2 + Math.random() * 3;
+        this.length = 20 + Math.random() * 20;
+        this.width = 4;
+        this.color = ribbonColors[Math.floor(Math.random() * ribbonColors.length)];
+        this.speed = 2 + Math.random() * 2;
+        this.angle = Math.random() * Math.PI * 2;
+        this.rotationSpeed = (Math.random() - 0.5) * 0.1;
       }
       draw() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
         ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, this.size, this.size);
+        ctx.fillRect(-this.width/2, -this.length/2, this.width, this.length);
+        ctx.restore();
       }
       update() {
         this.y += this.speed;
-        if (this.y > height) {
-          this.y = -10;
+        this.angle += this.rotationSpeed;
+        if (this.y > height + 20) {
+          this.y = -20;
           this.x = Math.random() * width;
         }
         this.draw();
@@ -152,18 +186,14 @@
     }
 
     function init() {
-      for (let i = 0; i < 30; i++) {
-        balloons.push(new Balloon());
-      }
-      for (let i = 0; i < 100; i++) {
-        confetti.push(new ConfettiPiece());
-      }
+      for (let i = 0; i < 25; i++) balloons.push(new Balloon());
+      for (let i = 0; i < 100; i++) ribbons.push(new Ribbon());
     }
 
     function animate() {
       ctx.clearRect(0, 0, width, height);
-      balloons.forEach(balloon => balloon.update());
-      confetti.forEach(piece => piece.update());
+      balloons.forEach(b => b.update());
+      ribbons.forEach(r => r.update());
       requestAnimationFrame(animate);
     }
 
