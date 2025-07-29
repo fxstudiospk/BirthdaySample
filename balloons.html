@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Balloons</title>
+  <style>
+    body {
+      margin: 0;
+      background: #F9F5FF;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Dancing Script', cursive;
+      overflow: hidden;
+    }
+
+    .balloon {
+      position: absolute;
+      width: 100px;
+      height: 130px;
+      border-radius: 50% 50% 50% 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 30px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .balloon:after {
+      content: '';
+      position: absolute;
+      bottom: -20px;
+      width: 2px;
+      height: 40px;
+      background: #555;
+    }
+
+    .pop {
+      transform: scale(1.3);
+      opacity: 0;
+    }
+
+    .message-box {
+      position: absolute;
+      right: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #f5f0e1;
+      padding: 20px 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      font-size: 24px;
+      color: #5a4635;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+      max-width: 300px;
+      text-align: center;
+    }
+    .message-box.show {
+      opacity: 1;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div id="balloon" class="balloon"></div>
+  <div id="message" class="message-box"></div>
+
+  <script>
+    const balloon = document.getElementById('balloon');
+    const messageBox = document.getElementById('message');
+
+    const colors = ['#FF3B3B', '#3B83FF', '#4BC04B', '#FFD133', '#FF69B4', '#9966FF', '#FF7F50', '#6A5ACD'];
+    const messages = [
+      "You're Cute","You're Charming","You're Amazing","You're Lovely","You're Smart",
+      "You're Sweet","You're Special","You're Gorgeous","You're Kind","You're Wonderful",
+      "You're Bright","You're Beautiful","You're Awesome","You're Adorable","You're Precious",
+      "You're Talented","You're Cheerful","You're Unique","You're Magical","You're Perfect"
+    ];
+
+    let currentIndex = 0;
+
+    function showBalloon() {
+      if (currentIndex >= 20) {
+        balloon.style.display = 'none';
+        messageBox.textContent = "All Balloons Popped!";
+        messageBox.classList.add('show');
+        return;
+      }
+      balloon.style.background = colors[Math.floor(Math.random() * colors.length)];
+      balloon.textContent = currentIndex + 1;
+      balloon.style.opacity = 1;
+      balloon.style.transform = "scale(1)";
+    }
+
+    balloon.addEventListener('click', () => {
+      // Pop animation
+      balloon.classList.add('pop');
+
+      // Show message
+      messageBox.textContent = messages[currentIndex];
+      messageBox.classList.add('show');
+
+      setTimeout(() => {
+        messageBox.classList.remove('show');
+        balloon.classList.remove('pop');
+        currentIndex++;
+        showBalloon();
+      }, 2000); // message visible for 2 sec
+    });
+
+    // Initial balloon
+    showBalloon();
+  </script>
+
+</body>
+</html>
