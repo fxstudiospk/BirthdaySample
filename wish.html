@@ -120,7 +120,7 @@
   <div class="cake">🎂</div>
 
   <!-- Continue Button -->
-  <button class="continue-btn" onclick="window.location.href='letter.html'">
+  <button class="continue-btn" id="continueBtn">
     Continue →
   </button>
 
@@ -136,6 +136,11 @@
       div.textContent = char === " " ? "" : char;
       bannerContainer.appendChild(div);
     }
+
+    // Redirect button
+    document.getElementById('continueBtn').addEventListener('click', () => {
+      window.location.href = "letter.html";
+    });
 
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
