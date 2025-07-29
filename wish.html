@@ -57,7 +57,7 @@
       position: absolute;
       font-size: 150px;
       left: 50%;
-      top: 45%; /* moved up */
+      top: 40%; /* upar move */
       transform: translateX(-50%);
       text-shadow: 0 0 15px rgba(0,0,0,0.3);
       z-index: 5;
@@ -66,53 +66,43 @@
     /* Age */
     .age {
       position: absolute;
-      top: 30%;
+      top: 28%;
       left: 50%;
       transform: translateX(-50%);
       font-size: 100px;
       font-weight: bold;
-      color: #A0522D; /* candle brownish color */
-      text-shadow: 0 0 15px rgba(160,82,45,0.6);
+      color: #A0522D; /* candle brownish */
+      text-shadow: 0 0 15px #D2691E;
       z-index: 6;
-    }
-
-    /* Sparkles */
-    .sparkle {
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      background: #FFD700;
-      border-radius: 50%;
-      animation: sparkleAnim 1s linear infinite;
-      z-index: 7;
-    }
-    @keyframes sparkleAnim {
-      0% { transform: scale(1) translateY(0); opacity: 1; }
-      50% { transform: scale(1.5) translateY(-10px); opacity: 0.5; }
-      100% { transform: scale(1) translateY(0); opacity: 1; }
     }
 
     /* Continue Button */
     .continue-btn {
       position: absolute;
-      top: 80%;  /* moved down for spacing */
+      top: 85%; /* neeche shift */
       left: 50%;
       transform: translateX(-50%);
-      padding: 12px 24px;
-      font-size: 20px;
-      color: white;
-      background: #8E44AD;
+      padding: 15px 30px;
+      font-size: 18px;
+      background: linear-gradient(90deg, #8E44AD, #9B59B6);
+      color: #fff;
       border: none;
-      border-radius: 50px;
+      border-radius: 30px;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      transition: background 0.3s ease;
-      z-index: 10;
+      opacity: 0;
+      animation: fadeIn 2s ease forwards 2s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: transform 0.2s ease;
     }
-    .continue-btn:hover { background: #732d91; }
+    .continue-btn:hover {
+      transform: translateX(-50%) scale(1.05);
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
 
     canvas {
       position: absolute;
@@ -128,11 +118,6 @@
   <!-- Age and Cake -->
   <div class="age">20</div>
   <div class="cake">🎂</div>
-
-  <!-- Sparkles -->
-  <div class="sparkle" style="left:48%; top:32%; animation-delay:0s;"></div>
-  <div class="sparkle" style="left:52%; top:34%; animation-delay:0.2s;"></div>
-  <div class="sparkle" style="left:50%; top:30%; animation-delay:0.4s;"></div>
 
   <!-- Continue Button -->
   <button class="continue-btn" onclick="window.location.href='letter.html'">
