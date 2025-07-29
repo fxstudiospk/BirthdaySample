@@ -41,6 +41,7 @@
       clip-path: polygon(0 0, 100% 0, 100% 80%, 50% 100%, 0 80%);
       box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     }
+
     .flag::after {
       content: "";
       position: absolute;
@@ -57,7 +58,7 @@
       position: absolute;
       font-size: 150px;
       left: 50%;
-      top: 38%; /* spacing fix */
+      top: 38%;
       transform: translateX(-50%);
       text-shadow: 0 0 15px rgba(0,0,0,0.3);
       z-index: 5;
@@ -71,7 +72,7 @@
       transform: translateX(-50%);
       font-size: 100px;
       font-weight: bold;
-      color: #A0522D; /* candle brownish */
+      color: #A0522D;
       text-shadow: 0 0 15px #D2691E;
       z-index: 6;
     }
@@ -79,7 +80,7 @@
     /* Continue Button */
     .continue-btn {
       position: absolute;
-      top: 78%; /* spacing fix */
+      top: 78%;
       left: 50%;
       transform: translateX(-50%);
       padding: 15px 30px;
@@ -94,7 +95,8 @@
       gap: 10px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
       transition: transform 0.2s ease;
-      opacity: 1; /* instantly visible */
+      opacity: 1;
+      z-index: 20; /* Highest */
     }
     .continue-btn:hover {
       transform: translateX(-50%) scale(1.05);
@@ -104,6 +106,7 @@
       position: absolute;
       top: 0;
       left: 0;
+      z-index: 1; /* Background only */
     }
   </style>
 </head>
