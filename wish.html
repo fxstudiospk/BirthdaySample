@@ -12,7 +12,7 @@
       font-family: Arial, sans-serif;
     }
 
-    /* Banner Flags Container */
+    /* Banner */
     .banner {
       position: fixed;
       top: 20px;
@@ -26,8 +26,6 @@
       0% { transform: translateX(0); }
       100% { transform: translateX(-30px); }
     }
-
-    /* Individual Flags */
     .flag {
       background: #000;
       color: #FFD700;
@@ -40,17 +38,6 @@
       font-family: 'Arial Black', sans-serif;
       clip-path: polygon(0 0, 100% 0, 100% 80%, 50% 100%, 0 80%);
       box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    }
-
-    .flag::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(120deg, rgba(255,255,255,0.2) 0%, transparent 60%);
-      pointer-events: none;
     }
 
     /* Cake */
@@ -96,7 +83,7 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
       transition: transform 0.2s ease;
       opacity: 1;
-      z-index: 20; /* Highest */
+      z-index: 20;
     }
     .continue-btn:hover {
       transform: translateX(-50%) scale(1.05);
@@ -106,27 +93,21 @@
       position: absolute;
       top: 0;
       left: 0;
-      z-index: 1; /* Background only */
+      z-index: 1;
     }
   </style>
 </head>
 <body>
-  <!-- Banner -->
   <div class="banner" id="banner"></div>
-
-  <!-- Age and Cake -->
   <div class="age">20</div>
   <div class="cake">🎂</div>
-
-  <!-- Continue Button -->
   <button class="continue-btn" onclick="window.location.href='letter.html'">
     Continue →
   </button>
-
   <canvas id="canvas"></canvas>
 
   <script>
-    // Banner letters
+    // Banner text
     const bannerText = "HAPPY BIRTHDAY AVINASH";
     const bannerContainer = document.getElementById('banner');
     for (let char of bannerText) {
@@ -151,7 +132,10 @@
 
     class Balloon {
       constructor() {
-        this.x = Math.random() * width;
+        this.side = Math.random() < 0.5 ? 'left' : 'right';
+        this.x = this.side === 'left'
+          ? Math.random() * (width * 0.3)
+          : width * 0.7 + Math.random() * (width * 0.3);
         this.y = height + 100;
         this.size = 40 + Math.random() * 20;
         this.color = balloonColors[Math.floor(Math.random() * balloonColors.length)];
@@ -167,7 +151,7 @@
         ctx.fillStyle = this.color;
         ctx.fill();
         ctx.beginPath();
-        ctx.arc(-this.size * 0.2, -this.size * 0.3, this.size * 0.15, 0, Math.PI*2);
+        ctx.arc(-this.size * 0.2, -this.size * 0.3, this.size * 0.15, 0, Math.PI * 2);
         ctx.fillStyle = "rgba(255,255,255,0.6)";
         ctx.fill();
         ctx.restore();
@@ -185,7 +169,10 @@
         this.angle += 0.02;
         if (this.y + this.size < -50) {
           this.y = height + 50;
-          this.x = Math.random() * width;
+          this.side = Math.random() < 0.5 ? 'left' : 'right';
+          this.x = this.side === 'left'
+            ? Math.random() * (width * 0.3)
+            : width * 0.7 + Math.random() * (width * 0.3);
         }
         this.draw();
       }
@@ -193,7 +180,10 @@
 
     class Confetti {
       constructor() {
-        this.x = Math.random() * width;
+        this.side = Math.random() < 0.5 ? 'left' : 'right';
+        this.x = this.side === 'left'
+          ? Math.random() * (width * 0.3)
+          : width * 0.7 + Math.random() * (width * 0.3);
         this.y = Math.random() * -height;
         this.size = 6 + Math.random() * 4;
         this.color = confettiColors[Math.floor(Math.random() * confettiColors.length)];
@@ -214,7 +204,10 @@
         this.angle += this.rotationSpeed;
         if (this.y > height + 20) {
           this.y = -20;
-          this.x = Math.random() * width;
+          this.side = Math.random() < 0.5 ? 'left' : 'right';
+          this.x = this.side === 'left'
+            ? Math.random() * (width * 0.3)
+            : width * 0.7 + Math.random() * (width * 0.3);
         }
         this.draw();
       }
