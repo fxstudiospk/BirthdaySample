@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Firefly Catch Game</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(ellipse at bottom, #2e1d47 0%, #000000 100%);
+      overflow: hidden;
+      font-family: 'Poppins', sans-serif;
+      color: #fff;
+    }
+    #counter {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.2rem;
+      background: rgba(0,0,0,0.4);
+      padding: 8px 16px;
+      border-radius: 20px;
+    }
+    #endMessage {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      display: none;
+    }
+    #endMessage h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #ffd700;
+      text-shadow: 0 0 10px #ffd700;
+    }
+    #continueBtn {
+      background: #6a4e93;
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      font-size: 1.2rem;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+    #continueBtn:hover {
+      background: #533b75;
+      transform: translateY(-3px);
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div id="counter">Fireflies Caught: 0 / 10</div>
+  <div id="endMessage">
+    <h2>You light up my world ❤️</h2>
+    <button id="continueBtn" onclick="window.location.href='puzzle.html'">Continue →</button>
+  </div>
+  <canvas id="gameCanvas"></canvas>
+
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+
+    window.addEventListener("resize", () => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    });
+
+    const totalFireflies = 10;
+    let firefliesCaught = 0;
+    const fireflies = [];
+
+    class Firefly {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.size = 12 + Math.random() * 3;
+        this.speedX = (Math.random() - 0.5) * 1.5;
+        this.speedY = (Math.random() - 0.5) * 1.5;
+        this.glow = Math.random() * 0.5 + 0.5;
+        this.caught = false;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = rgba(255, 223, 0, ${this.glow});
+        ctx.shadowColor = "#ffd700";
+        ctx.shadowBlur = 20;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.x < 0 || this.x > width) this.speedX *= -1;
+        if (this.y < 0 || this.y > height) this.speedY *= -1;
+        this.glow = 0.5 + Math.sin(Date.now() * 0.005 + this.x) * 0.5;
+      }
+    }
+
+    for (let i = 0; i < totalFireflies; i++) {
+      fireflies.push(new Firefly());
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      fireflies.forEach((f) => {
+        if (!f.caught) {
+          f.update();
+          f.draw();
+        }
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    canvas.addEventListener("click", (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+      fireflies.forEach((f) => {
+        const dx = mouseX - f.x;
+        const dy = mouseY - f.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        if (distance < f.size && !f.caught) {
+          f.caught = true;
+          firefliesCaught++;
+          document.getElementById("counter").textContent = 
+            Fireflies Caught: ${firefliesCaught} / ${totalFireflies};
+          if (firefliesCaught === totalFireflies) {
+            document.getElementById("endMessage").style.display = "block";
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
