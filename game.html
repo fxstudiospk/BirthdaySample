@@ -3,40 +3,49 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bee Catch Game</title>
+  <title>Love Maze</title>
   <style>
     body {
       margin: 0;
       padding: 0;
-      position: relative; /* important for absolute bees */
-      background: radial-gradient(ellipse at bottom, #2e1d47 0%, #000000 100%);
-      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #f9f4ef;
       font-family: 'Poppins', sans-serif;
-      color: #fff;
+      overflow: hidden;
     }
-    #counter {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 1.2rem;
-      background: rgba(0,0,0,0.4);
-      padding: 8px 16px;
-      border-radius: 20px;
-      pointer-events: none;
-      user-select: none;
-      z-index: 10;
+    #maze {
+      position: relative;
+      width: 400px;
+      height: 400px;
+      background: #ffffff;
+      border: 5px solid #6a4e93;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+    .wall {
+      position: absolute;
+      background: #6a4e93;
+    }
+    #player {
+      position: absolute;
+      font-size: 28px;
+      transition: left 0.1s linear, top 0.1s linear;
+      z-index: 5;
+    }
+    #goal {
+      position: absolute;
+      font-size: 30px;
     }
     #popup {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       background: rgba(0,0,0,0.6);
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.5s ease;
@@ -48,12 +57,12 @@
     }
     .popup-content {
       background: #fff;
-      color: #2e1d47;
       padding: 30px 40px;
       border-radius: 20px;
       text-align: center;
-      transform: scale(0.7);
-      animation: popIn 0.6s forwards;
+      color: #2e1d47;
+      transform: scale(0.8);
+      animation: popIn 0.5s forwards;
     }
     .popup-content h2 {
       font-size: 1.8rem;
@@ -75,84 +84,94 @@
       transform: translateY(-3px);
     }
     @keyframes popIn {
-      0% { transform: scale(0.7); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    .bee {
-      position: absolute;
-      font-size: 32px;
-      cursor: pointer;
-      transition: transform 0.2s;
-      user-select: none;
-      z-index: 5;
-    }
-    .bee:active {
-      transform: scale(0.8);
+      from {transform: scale(0.8); opacity:0;}
+      to {transform: scale(1); opacity:1;}
     }
   </style>
 </head>
 <body>
-  <div id="counter">Bees Caught: 0 / 10</div>
+  <div id="maze">
+    <!-- Maze walls -->
+    <div class="wall" style="top: 80px; left: 0; width: 300px; height: 20px;"></div>
+    <div class="wall" style="top: 160px; left: 100px; width: 300px; height: 20px;"></div>
+    <div class="wall" style="top: 240px; left: 0; width: 300px; height: 20px;"></div>
+
+    <!-- Player & Goal -->
+    <div id="player" style="top: 10px; left: 10px;">❤️</div>
+    <div id="goal" style="bottom: 10px; right: 10px;">💖</div>
+  </div>
+
+  <!-- Popup -->
   <div id="popup">
     <div class="popup-content">
-      <h2>You caught all the bees and my heart too ❤️</h2>
+      <h2>Found my way to you ❤️</h2>
       <button onclick="window.location.href='puzzle.html'">Continue →</button>
     </div>
   </div>
 
-  <script>
-    const totalBees = 10;
-    let beesCaught = 0;
-    const counter = document.getElementById("counter");
-    const popup = document.getElementById("popup");
+<script>
+  const player = document.getElementById("player");
+  const goal = document.getElementById("goal");
+  const popup = document.getElementById("popup");
+  const walls = document.querySelectorAll(".wall");
 
-    const bees = [];
-    function createBee() {
-      const bee = document.createElement("div");
-      bee.classList.add("bee");
-      bee.textContent = "🐝";
-      const startX = Math.random() * (window.innerWidth - 60);
-      const startY = Math.random() * (window.innerHeight - 60);
-      bee.style.left = startX + "px";
-      bee.style.top = startY + "px";
-      document.body.appendChild(bee);
+  let playerPos = { top: 10, left: 10 };
+  const step = 20;
 
-      const beeObj = {
-        el: bee,
-        x: startX,
-        y: startY,
-        dx: (Math.random() - 0.5) * 2,
-        dy: (Math.random() - 0.5) * 2
+  document.addEventListener("keydown", (e) => {
+    let newTop = playerPos.top;
+    let newLeft = playerPos.left;
+
+    if (e.key === "ArrowUp") newTop -= step;
+    if (e.key === "ArrowDown") newTop += step;
+    if (e.key === "ArrowLeft") newLeft -= step;
+    if (e.key === "ArrowRight") newLeft += step;
+
+    // collision detection with walls
+    let playerRect = { top: newTop, left: newLeft, width: 28, height: 28 };
+    let collides = false;
+    walls.forEach(w => {
+      const wallRect = w.getBoundingClientRect();
+      const mazeRect = w.parentNode.getBoundingClientRect();
+      const wall = {
+        top: wallRect.top - mazeRect.top,
+        left: wallRect.left - mazeRect.left,
+        width: wallRect.width,
+        height: wallRect.height
       };
-      bees.push(beeObj);
+      if (
+        playerRect.left < wall.left + wall.width &&
+        playerRect.left + playerRect.width > wall.left &&
+        playerRect.top < wall.top + wall.height &&
+        playerRect.top + playerRect.height > wall.top
+      ) {
+        collides = true;
+      }
+    });
 
-      bee.addEventListener("click", () => {
-        bee.remove();
-        beesCaught++;
-        counter.textContent = Bees Caught: ${beesCaught} / ${totalBees};
-        if (beesCaught === totalBees) {
-          setTimeout(() => popup.classList.add("active"), 300);
-        }
-      });
+    if (!collides && newTop >= 0 && newLeft >= 0 &&
+        newTop <= 400 - 28 && newLeft <= 400 - 28) {
+      playerPos = { top: newTop, left: newLeft };
+      player.style.top = playerPos.top + "px";
+      player.style.left = playerPos.left + "px";
     }
 
-    for (let i = 0; i < totalBees; i++) createBee();
+    // check goal
+    const goalRect = goal.getBoundingClientRect();
+    const mazeRect = goal.parentNode.getBoundingClientRect();
+    const gx = goalRect.left - mazeRect.left;
+    const gy = goalRect.top - mazeRect.top;
+    const gw = goalRect.width, gh = goalRect.height;
 
-    function animate() {
-      bees.forEach(b => {
-        if (!b.el.parentNode) return; 
-        b.x += b.dx;
-        b.y += b.dy;
-
-        if (b.x < 0 || b.x > window.innerWidth - 40) b.dx *= -1;
-        if (b.y < 0 || b.y > window.innerHeight - 40) b.dy *= -1;
-
-        b.el.style.left = b.x + "px";
-        b.el.style.top = b.y + "px";
-      });
-      requestAnimationFrame(animate);
+    if (
+      playerPos.left < gx + gw &&
+      playerPos.left + 28 > gx &&
+      playerPos.top < gy + gh &&
+      playerPos.top + 28 > gy
+    ) {
+      popup.classList.add("active");
     }
-    animate();
-  </script>
+  });
+</script>
 </body>
 </html>
