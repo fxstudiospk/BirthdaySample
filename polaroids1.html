@@ -27,7 +27,7 @@
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      max-width: 1100px;
+      max-width: 900px;
       margin: 50px auto;
       padding: 20px;
       gap: 40px;
@@ -42,15 +42,14 @@
     .image-section {
       flex: 1;
       display: flex;
-      flex-direction: column;
-      gap: 30px;
-      align-items: center;
+      justify-content: center;
       animation: fadeInRight 1.5s ease;
     }
     .polaroid {
       background: white;
       padding: 10px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transform: rotate(-3deg);
       transition: transform 0.4s ease;
     }
     .polaroid img {
@@ -59,13 +58,7 @@
       display: block;
     }
     .polaroid:hover {
-      transform: scale(1.05) rotate(1deg);
-    }
-    .first {
-      transform: rotate(-3deg);
-    }
-    .second {
-      transform: rotate(3deg);
+      transform: scale(1.05) rotate(0deg);
     }
     .continue-btn {
       display: block;
@@ -85,7 +78,6 @@
       transform: translateY(-3px);
     }
 
-    /* Animations */
     @keyframes fadeInDown {
       from { opacity: 0; transform: translateY(-30px); }
       to { opacity: 1; transform: translateY(0); }
@@ -115,25 +107,22 @@
   <h1>THE MEMORIES WE HOLD TOGETHER</h1>
   <div class="container">
     <div class="text-section">
-      <p><em>"A snapshot of joy,<br>
+      <p><em>A snapshot of joy,<br>
       where laughter meets love<br>
-      and time stands still."</em></p>
-      <p><em>"Moments wrapped in warmth,<br>
+      and time stands still.</em></p>
+      <p><em>Moments wrapped in warmth,<br>
       painted in the hues of memories<br>
-      we hold forever."</em></p>
+      we hold forever.</em></p>
     </div>
 
     <div class="image-section">
-      <div class="polaroid first">
+      <div class="polaroid">
         <img src="first.jpeg" alt="First Memory">
-      </div>
-      <div class="polaroid second">
-        <img src="second.jpeg" alt="Second Memory">
       </div>
     </div>
   </div>
 
-  <button class="continue-btn" onclick="window.location.href='pola.html'">
+  <button class="continue-btn" onclick="window.location.href='polaroids2.html'">
     Continue →
   </button>
 
