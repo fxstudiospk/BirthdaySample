@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Firefly Catch Game</title>
+  <title>Bee Catch Game</title>
   <style>
     body {
       margin: 0;
@@ -22,22 +22,43 @@
       background: rgba(0,0,0,0.4);
       padding: 8px 16px;
       border-radius: 20px;
+      pointer-events: none;
+      user-select: none;
+      z-index: 10;
     }
-    #endMessage {
+    #popup {
       position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease;
+      z-index: 20;
+    }
+    #popup.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .popup-content {
+      background: #fff;
+      color: #2e1d47;
+      padding: 30px 40px;
+      border-radius: 20px;
       text-align: center;
-      display: none;
+      transform: scale(0.7);
+      animation: popIn 0.6s forwards;
     }
-    #endMessage h2 {
-      font-size: 2rem;
+    .popup-content h2 {
+      font-size: 1.8rem;
       margin-bottom: 20px;
-      color: #ffd700;
-      text-shadow: 0 0 10px #ffd700;
     }
-    #continueBtn {
+    .popup-content button {
       background: #6a4e93;
       color: white;
       border: none;
@@ -48,103 +69,88 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
       transition: background 0.3s ease, transform 0.3s ease;
     }
-    #continueBtn:hover {
+    .popup-content button:hover {
       background: #533b75;
       transform: translateY(-3px);
     }
-    canvas {
-      display: block;
+    @keyframes popIn {
+      0% { transform: scale(0.7); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .bee {
+      position: absolute;
+      font-size: 32px;
+      cursor: pointer;
+      transition: transform 0.2s;
+      user-select: none;
+    }
+    .bee:active {
+      transform: scale(0.8);
     }
   </style>
 </head>
 <body>
-  <div id="counter">Fireflies Caught: 0 / 10</div>
-  <div id="endMessage">
-    <h2>You light up my world ❤️</h2>
-    <button id="continueBtn" onclick="window.location.href='puzzle.html'">Continue →</button>
+  <div id="counter">Bees Caught: 0 / 10</div>
+  <div id="popup">
+    <div class="popup-content">
+      <h2>You caught all the bees and my heart too ❤️</h2>
+      <button onclick="window.location.href='puzzle.html'">Continue →</button>
+    </div>
   </div>
-  <canvas id="gameCanvas"></canvas>
 
   <script>
-    const canvas = document.getElementById("gameCanvas");
-    const ctx = canvas.getContext("2d");
-    let width = window.innerWidth;
-    let height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
+    const totalBees = 10;
+    let beesCaught = 0;
+    const counter = document.getElementById("counter");
+    const popup = document.getElementById("popup");
 
-    window.addEventListener("resize", () => {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      canvas.width = width;
-      canvas.height = height;
-    });
+    const bees = [];
+    for (let i = 0; i < totalBees; i++) {
+      const bee = document.createElement("div");
+      bee.classList.add("bee");
+      bee.textContent = "🐝";
+      bee.style.left = Math.random() * (window.innerWidth - 50) + "px";
+      bee.style.top = Math.random() * (window.innerHeight - 50) + "px";
+      document.body.appendChild(bee);
 
-    const totalFireflies = 10;
-    let firefliesCaught = 0;
-    const fireflies = [];
+      bees.push({
+        el: bee,
+        x: parseFloat(bee.style.left),
+        y: parseFloat(bee.style.top),
+        dx: (Math.random() - 0.5) * 2,
+        dy: (Math.random() - 0.5) * 2
+      });
 
-    class Firefly {
-      constructor() {
-        this.x = Math.random() * width;
-        this.y = Math.random() * height;
-        this.size = 12 + Math.random() * 3;
-        this.speedX = (Math.random() - 0.5) * 1.5;
-        this.speedY = (Math.random() - 0.5) * 1.5;
-        this.glow = Math.random() * 0.5 + 0.5;
-        this.caught = false;
-      }
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = rgba(255, 223, 0, ${this.glow});
-        ctx.shadowColor = "#ffd700";
-        ctx.shadowBlur = 20;
-        ctx.fill();
-        ctx.shadowBlur = 0;
-      }
-      update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-        if (this.x < 0 || this.x > width) this.speedX *= -1;
-        if (this.y < 0 || this.y > height) this.speedY *= -1;
-        this.glow = 0.5 + Math.sin(Date.now() * 0.005 + this.x) * 0.5;
-      }
-    }
-
-    for (let i = 0; i < totalFireflies; i++) {
-      fireflies.push(new Firefly());
+      bee.addEventListener("click", () => {
+        bee.remove();
+        beesCaught++;
+        counter.textContent = Bees Caught: ${beesCaught} / ${totalBees};
+        if (beesCaught === totalBees) {
+          setTimeout(() => popup.classList.add("active"), 300);
+        }
+      });
     }
 
     function animate() {
-      ctx.clearRect(0, 0, width, height);
-      fireflies.forEach((f) => {
-        if (!f.caught) {
-          f.update();
-          f.draw();
-        }
+      bees.forEach(b => {
+        if (!b.el.parentNode) return; 
+        b.x += b.dx;
+        b.y += b.dy;
+
+        if (b.x < 0 || b.x > window.innerWidth - 50) b.dx *= -1;
+        if (b.y < 0 || b.y > window.innerHeight - 50) b.dy *= -1;
+
+        b.el.style.left = b.x + "px";
+        b.el.style.top = b.y + "px";
       });
       requestAnimationFrame(animate);
     }
     animate();
 
-    canvas.addEventListener("click", (e) => {
-      const rect = canvas.getBoundingClientRect();
-      const mouseX = e.clientX - rect.left;
-      const mouseY = e.clientY - rect.top;
-      fireflies.forEach((f) => {
-        const dx = mouseX - f.x;
-        const dy = mouseY - f.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        if (distance < f.size && !f.caught) {
-          f.caught = true;
-          firefliesCaught++;
-          document.getElementById("counter").textContent = 
-            Fireflies Caught: ${firefliesCaught} / ${totalFireflies};
-          if (firefliesCaught === totalFireflies) {
-            document.getElementById("endMessage").style.display = "block";
-          }
-        }
+    window.addEventListener("resize", () => {
+      bees.forEach(b => {
+        b.x = Math.min(b.x, window.innerWidth - 50);
+        b.y = Math.min(b.y, window.innerHeight - 50);
       });
     });
   </script>
