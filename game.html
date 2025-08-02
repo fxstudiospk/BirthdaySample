@@ -8,6 +8,7 @@
     body {
       margin: 0;
       padding: 0;
+      position: relative; /* important for absolute bees */
       background: radial-gradient(ellipse at bottom, #2e1d47 0%, #000000 100%);
       overflow: hidden;
       font-family: 'Poppins', sans-serif;
@@ -83,6 +84,7 @@
       cursor: pointer;
       transition: transform 0.2s;
       user-select: none;
+      z-index: 5;
     }
     .bee:active {
       transform: scale(0.8);
@@ -105,21 +107,24 @@
     const popup = document.getElementById("popup");
 
     const bees = [];
-    for (let i = 0; i < totalBees; i++) {
+    function createBee() {
       const bee = document.createElement("div");
       bee.classList.add("bee");
       bee.textContent = "🐝";
-      bee.style.left = Math.random() * (window.innerWidth - 50) + "px";
-      bee.style.top = Math.random() * (window.innerHeight - 50) + "px";
+      const startX = Math.random() * (window.innerWidth - 60);
+      const startY = Math.random() * (window.innerHeight - 60);
+      bee.style.left = startX + "px";
+      bee.style.top = startY + "px";
       document.body.appendChild(bee);
 
-      bees.push({
+      const beeObj = {
         el: bee,
-        x: parseFloat(bee.style.left),
-        y: parseFloat(bee.style.top),
+        x: startX,
+        y: startY,
         dx: (Math.random() - 0.5) * 2,
         dy: (Math.random() - 0.5) * 2
-      });
+      };
+      bees.push(beeObj);
 
       bee.addEventListener("click", () => {
         bee.remove();
@@ -131,14 +136,16 @@
       });
     }
 
+    for (let i = 0; i < totalBees; i++) createBee();
+
     function animate() {
       bees.forEach(b => {
         if (!b.el.parentNode) return; 
         b.x += b.dx;
         b.y += b.dy;
 
-        if (b.x < 0 || b.x > window.innerWidth - 50) b.dx *= -1;
-        if (b.y < 0 || b.y > window.innerHeight - 50) b.dy *= -1;
+        if (b.x < 0 || b.x > window.innerWidth - 40) b.dx *= -1;
+        if (b.y < 0 || b.y > window.innerHeight - 40) b.dy *= -1;
 
         b.el.style.left = b.x + "px";
         b.el.style.top = b.y + "px";
@@ -146,13 +153,6 @@
       requestAnimationFrame(animate);
     }
     animate();
-
-    window.addEventListener("resize", () => {
-      bees.forEach(b => {
-        b.x = Math.min(b.x, window.innerWidth - 50);
-        b.y = Math.min(b.y, window.innerHeight - 50);
-      });
-    });
   </script>
 </body>
 </html>
