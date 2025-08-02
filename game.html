@@ -9,12 +9,19 @@
       margin: 0;
       padding: 0;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
       background: #f9f4ef;
       font-family: 'Poppins', sans-serif;
       overflow: hidden;
+    }
+    h2.instructions {
+      color: #6a4e93;
+      margin-bottom: 15px;
+      font-weight: 600;
+      text-align: center;
     }
     #maze {
       position: relative;
@@ -30,13 +37,13 @@
     }
     #player {
       position: absolute;
-      font-size: 28px;
+      font-size: 32px;
       transition: left 0.1s linear, top 0.1s linear;
       z-index: 5;
     }
     #goal {
       position: absolute;
-      font-size: 30px;
+      font-size: 34px;
     }
     #popup {
       position: fixed;
@@ -90,6 +97,7 @@
   </style>
 </head>
 <body>
+  <h2 class="instructions">Help the heart find its way — swipe, drag or use the arrows 💖</h2>
   <div id="maze">
     <!-- Maze walls -->
     <div class="wall" style="top: 80px; left: 0; width: 300px; height: 20px;"></div>
@@ -118,16 +126,17 @@
   let playerPos = { top: 10, left: 10 };
   const step = 20;
 
-  document.addEventListener("keydown", (e) => {
+  // ---- Movement common function ----
+  function movePlayer(key) {
     let newTop = playerPos.top;
     let newLeft = playerPos.left;
 
-    if (e.key === "ArrowUp") newTop -= step;
-    if (e.key === "ArrowDown") newTop += step;
-    if (e.key === "ArrowLeft") newLeft -= step;
-    if (e.key === "ArrowRight") newLeft += step;
+    if (key === "ArrowUp") newTop -= step;
+    if (key === "ArrowDown") newTop += step;
+    if (key === "ArrowLeft") newLeft -= step;
+    if (key === "ArrowRight") newLeft += step;
 
-    // collision detection with walls
+    // collision detection
     let playerRect = { top: newTop, left: newLeft, width: 28, height: 28 };
     let collides = false;
     walls.forEach(w => {
@@ -156,7 +165,7 @@
       player.style.left = playerPos.left + "px";
     }
 
-    // check goal
+    // goal check
     const goalRect = goal.getBoundingClientRect();
     const mazeRect = goal.parentNode.getBoundingClientRect();
     const gx = goalRect.left - mazeRect.left;
@@ -170,6 +179,53 @@
       playerPos.top + 28 > gy
     ) {
       popup.classList.add("active");
+    }
+  }
+
+  // ---- Arrow keys ----
+  document.addEventListener("keydown", (e) => {
+    if (["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key)) {
+      movePlayer(e.key);
+    }
+  });
+
+  // ---- Touch Swipe ----
+  let touchStartX = 0, touchStartY = 0;
+  document.addEventListener("touchstart", (e) => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  });
+  document.addEventListener("touchend", (e) => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy)) {
+      if (dx > 30) movePlayer("ArrowRight");
+      else if (dx < -30) movePlayer("ArrowLeft");
+    } else {
+      if (dy > 30) movePlayer("ArrowDown");
+      else if (dy < -30) movePlayer("ArrowUp");
+    }
+  });
+
+  // ---- Mouse Drag (Touchscreen laptop) ----
+  let isDragging = false;
+  let startX = 0, startY = 0;
+  document.addEventListener("mousedown", (e) => {
+    isDragging = true;
+    startX = e.clientX;
+    startY = e.clientY;
+  });
+  document.addEventListener("mouseup", (e) => {
+    if (!isDragging) return;
+    isDragging = false;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    if (Math.abs(dx) > Math.abs(dy)) {
+      if (dx > 30) movePlayer("ArrowRight");
+      else if (dx < -30) movePlayer("ArrowLeft");
+    } else {
+      if (dy > 30) movePlayer("ArrowDown");
+      else if (dy < -30) movePlayer("ArrowUp");
     }
   });
 </script>
