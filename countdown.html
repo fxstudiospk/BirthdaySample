@@ -14,6 +14,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: flex-start;
       height: 100vh;
     }
     h1 {
@@ -21,21 +22,27 @@
       font-size: 2.5rem;
       color: #6a4e23;
     }
-    .puzzle-container {
-      margin-top: 40px;
+    .puzzle-wrapper {
+      position: relative;
       width: 300px;
       height: 300px;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: repeat(3, 1fr);
-      gap: 2px;
+      margin-top: 40px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
     }
-    .piece {
+    .puzzle-wrapper img {
       width: 100%;
       height: 100%;
-      background-image: url('puzzlepic.jpeg');
-      background-size: 300px 300px;
-      cursor: grab;
+      display: block;
+    }
+    .cover-tile {
+      position: absolute;
+      width: calc(100% / 3);
+      height: calc(100% / 3);
+      background: rgba(0,0,0,0.8);
+      transition: opacity 0.5s ease;
+      cursor: pointer;
     }
     .popup {
       position: fixed;
@@ -66,7 +73,9 @@
 </head>
 <body>
   <h1>SOLVE THE PUZZLE</h1>
-  <div class="puzzle-container" id="puzzle"></div>
+  <div class="puzzle-wrapper" id="puzzle">
+    <img src="puzzlepic.jpeg" alt="Puzzle Image">
+  </div>
 
   <div class="popup" id="popup">
     <div>You did it! 🎉</div>
@@ -74,63 +83,24 @@
   </div>
 
   <script>
-    const container = document.getElementById('puzzle');
+    const puzzle = document.getElementById('puzzle');
     const popup = document.getElementById('popup');
+    let tilesLeft = 9;
 
-    // Generate positions for 3x3 grid
-    const positions = [];
+    // Generate 3x3 cover tiles
     for (let row = 0; row < 3; row++) {
       for (let col = 0; col < 3; col++) {
-        positions.push({ x: col * -100, y: row * -100 });
-      }
-    }
-
-    // Shuffle positions array
-    shuffle(positions);
-
-    // Create pieces
-    positions.forEach((pos, index) => {
-      const piece = document.createElement('div');
-      piece.className = 'piece';
-      piece.style.backgroundPosition = ${pos.x}px ${pos.y}px;
-      piece.setAttribute('data-pos', index); 
-      piece.draggable = true;
-      container.appendChild(piece);
-    });
-
-    let draggedPiece = null;
-    container.addEventListener('dragstart', e => {
-      draggedPiece = e.target;
-    });
-    container.addEventListener('dragover', e => e.preventDefault());
-    container.addEventListener('drop', e => {
-      e.preventDefault();
-      if (e.target.classList.contains('piece') && e.target !== draggedPiece) {
-        const tempPos = draggedPiece.style.backgroundPosition;
-        draggedPiece.style.backgroundPosition = e.target.style.backgroundPosition;
-        e.target.style.backgroundPosition = tempPos;
-
-        checkWin();
-      }
-    });
-
-    function checkWin() {
-      const pieces = document.querySelectorAll('.piece');
-      let correctCount = 0;
-      pieces.forEach((piece, index) => {
-        const correctX = (index % 3) * -100;
-        const correctY = Math.floor(index / 3) * -100;
-        if (piece.style.backgroundPosition === ${correctX}px ${correctY}px) {
-          correctCount++;
-        }
-      });
-      if (correctCount === 9) popup.style.display = 'block';
-    }
-
-    function shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
+        const tile = document.createElement('div');
+        tile.classList.add('cover-tile');
+        tile.style.top = ${(100 / 3) * row}%;
+        tile.style.left = ${(100 / 3) * col}%;
+        tile.addEventListener('click', () => {
+          tile.style.opacity = 0;
+          tile.style.pointerEvents = 'none';
+          tilesLeft--;
+          if (tilesLeft === 0) popup.style.display = 'block';
+        });
+        puzzle.appendChild(tile);
       }
     }
   </script>
