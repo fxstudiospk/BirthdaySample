@@ -7,20 +7,20 @@
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body { margin:0; padding:0; font-family:'Poppins',sans-serif; background:#f9f4ef; color:#5a4a3b;
-           display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; }
-    h1 { font-family:'Dancing Script',cursive; font-size:2.5rem; color:#6a4e93; margin-bottom:30px; }
+           display:flex; flex-direction:column; align-items:center; justify-content:flex-start; height:100vh; }
+    h1 { font-family:'Dancing Script',cursive; font-size:2.5rem; color:#6a4e93; margin-top:40px; margin-bottom:20px; }
     .player-container { background:#fff; border-radius:20px; box-shadow:0 4px 15px rgba(0,0,0,0.2);
-                        padding:30px 40px; text-align:center; width:320px; position:relative; }
+                        padding:30px 40px; text-align:center; width:320px; }
     .album-art { width:200px; height:200px; border-radius:50%; margin:0 auto 20px; overflow:hidden; 
                  box-shadow:0 4px 15px rgba(0,0,0,0.2); }
     .album-art img { width:100%; height:100%; object-fit:cover; }
-    #countdown { font-size:1.3rem; color:#6a4e93; margin:15px 0; font-weight:600; animation:pulse 1s infinite; }
+    #countdown { font-size:1.3rem; color:#6a4e93; margin:10px 0 20px 0; font-weight:600; animation:pulse 1s infinite; }
     @keyframes pulse { 
       0% { transform:scale(1); opacity:1; } 
       50% { transform:scale(1.05); opacity:0.9; } 
       100% { transform:scale(1); opacity:1; }
     }
-    .continue-btn { display:block; margin-top:10px; margin-left:20px; 
+    .continue-btn { display:block; margin:0 auto; 
                     padding:12px 30px; background:#6a4e93; color:white; border:none; 
                     font-size:1.2rem; border-radius:30px; cursor:pointer; 
                     box-shadow:0 4px 10px rgba(0,0,0,0.2);
