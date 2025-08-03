@@ -1,71 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tick Tock Tick Tock 💖</title>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    body { margin:0; padding:0; font-family:'Poppins',sans-serif; background:#f9f4ef; color:#5a4a3b;
-           display:flex; flex-direction:column; align-items:center; justify-content:flex-start; height:100vh; }
-    h1 { font-family:'Dancing Script',cursive; font-size:2.5rem; color:#6a4e93; margin-top:40px; margin-bottom:20px; }
-    .player-container { background:#fff; border-radius:20px; box-shadow:0 4px 15px rgba(0,0,0,0.2);
-                        padding:30px 40px; text-align:center; width:320px; }
-    .album-art { width:200px; height:200px; border-radius:50%; margin:0 auto 20px; overflow:hidden; 
-                 box-shadow:0 4px 15px rgba(0,0,0,0.2); }
-    .album-art img { width:100%; height:100%; object-fit:cover; }
-    #countdown { font-size:1.3rem; color:#6a4e93; margin:10px 0 20px 0; font-weight:600; animation:pulse 1s infinite; }
-    @keyframes pulse { 
-      0% { transform:scale(1); opacity:1; } 
-      50% { transform:scale(1.05); opacity:0.9; } 
-      100% { transform:scale(1); opacity:1; }
-    }
-    .continue-btn { display:block; margin:0 auto; 
-                    padding:12px 30px; background:#6a4e93; color:white; border:none; 
-                    font-size:1.2rem; border-radius:30px; cursor:pointer; 
-                    box-shadow:0 4px 10px rgba(0,0,0,0.2);
-                    transition:background 0.3s ease, transform 0.3s ease; }
-    .continue-btn:hover { background:#533b75; transform:translateY(-3px); }
-    .heart { position:absolute; font-size:1.5rem; color:#e91e63; animation:floatUp 6s linear infinite; }
-    @keyframes floatUp { 0%{transform:translateY(100vh) scale(0.8);opacity:1;} 
-                         100%{transform:translateY(-10vh) scale(1.5);opacity:0;} }
-  </style>
-</head>
-<body>
-  <h1>Tick Tock Tick Tock 💖</h1>
-  <div class="player-container">
-    <div class="album-art"><img src="songpic.jpeg" alt="Album Art"></div>
-    <div id="countdown"></div>
-    <button class="continue-btn" onclick="window.location.href='puzzle.html'">Continue →</button>
-  </div>
-  <div class="heart" style="left:10%">💖</div>
-  <div class="heart" style="left:50%; animation-delay:2s;">💖</div>
-  <div class="heart" style="left:80%; animation-delay:4s;">💖</div>
-
-  <script>
-    const countdown = document.getElementById('countdown');
-    const targetDate = new Date('August 25, 2025 00:00:00').getTime();
-
-    function updateCountdown() {
-      const now = new Date().getTime();
-      const distance = targetDate - now;
-
-      if (distance <= 0) {
-        countdown.innerHTML = "Happy Birthday! 🎉";
-        clearInterval(timer);
-        return;
-      }
-
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-      countdown.innerHTML = ${days} Days ${hours.toString().padStart(2,'0')} : ${minutes.toString().padStart(2,'0')} : ${seconds.toString().padStart(2,'0')};
-    }
-
-    const timer = setInterval(updateCountdown, 1000);
-    updateCountdown();
-  </script>
-</body>
-</html>
+<div id="countdown" style="font-size:1.3rem; margin:10px 0; font-weight:600; color:#6a4e93;">
+  Loading...
+</div>
+<script>
+  const countdown = document.getElementById('countdown');
+  const targetDate = new Date('August 25, 2025 00:00:00').getTime();
+  function updateCountdown() {
+    const now = new Date().getTime();
+    const distance = targetDate - now;
+    if (distance <= 0) { countdown.textContent = "Happy Birthday! 🎉"; return; }
+    const d = Math.floor(distance/(1000*60*60*24));
+    const h = Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+    const m = Math.floor((distance%(1000*60*60))/(1000*60));
+    const s = Math.floor((distance%(1000*60))/1000);
+    countdown.textContent = ${d} Days ${h}:${m}:${s};
+  }
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
+</script>
