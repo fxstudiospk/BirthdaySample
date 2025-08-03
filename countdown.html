@@ -3,137 +3,135 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Open the Letters</title>
+  <title>Solve the Puzzle</title>
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       padding: 0;
-      font-family: 'Dancing Script', cursive;
       background: linear-gradient(135deg, #fdf6ec, #f3e5d0);
+      font-family: 'Dancing Script', cursive;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
       height: 100vh;
-      overflow: hidden;
     }
     h1 {
-      position: absolute;
-      top: 30px;
+      margin-top: 40px;
       font-size: 2.5rem;
       color: #6a4e23;
     }
-    .letter {
-      width: 60px;
-      height: 60px;
-      background: #d9c3a3;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1.5rem;
-      color: #fff;
-      cursor: pointer;
-      position: absolute;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      transition: transform 0.3s ease;
-      animation: float 6s infinite ease-in-out;
+    .puzzle-container {
+      margin-top: 40px;
+      width: 300px;
+      height: 300px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 2px;
     }
-    .letter:hover {
-      transform: scale(1.1);
+    .piece {
+      width: 100%;
+      height: 100%;
+      background-image: url('puzzlepic.jpeg');
+      background-size: 300px 300px;
+      cursor: grab;
     }
-    /* floating animation */
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-20px); }
-      100% { transform: translateY(0px); }
-    }
-    /* Popup */
     .popup {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       background: #ffffff;
+      padding: 30px 40px;
       border-radius: 10px;
-      padding: 20px 30px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-      font-size: 1.2rem;
-      text-align: center;
-      color: #6a4e23;
       display: none;
+      text-align: center;
+      font-size: 1.5rem;
+      color: #6a4e23;
       z-index: 10;
     }
     .popup button {
       margin-top: 15px;
-      padding: 5px 15px;
+      padding: 10px 20px;
       border: none;
-      background: #d9c3a3;
-      color: #fff;
+      background: #6a4e23;
+      color: white;
       font-size: 1rem;
       border-radius: 5px;
       cursor: pointer;
     }
-    .continue-btn {
-      position: absolute;
-      bottom: 80px;
-      padding: 12px 30px;
-      background: #6a4e23;
-      color: #fff;
-      border: none;
-      font-size: 1.2rem;
-      border-radius: 30px;
-      cursor: pointer;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      transition: background 0.3s ease, transform 0.3s ease;
-    }
-    .continue-btn:hover {
-      background: #4a3519;
-      transform: translateY(-3px);
-    }
   </style>
 </head>
 <body>
-  <h1>Open the Letters</h1>
+  <h1>SOLVE THE PUZZLE</h1>
+  <div class="puzzle-container" id="puzzle"></div>
 
-  <!-- Letters -->
-  <div class="letter" style="top:100px; left:30%;">1</div>
-  <div class="letter" style="top:100px; right:30%;">2</div>
-  <div class="letter" style="top:50%; left:50%; transform:translate(-50%, -50%);">3</div>
-  <div class="letter" style="bottom:100px; left:25%;">4</div>
-  <div class="letter" style="bottom:100px; right:25%;">5</div>
-
-  <!-- Popup -->
   <div class="popup" id="popup">
-    <div id="popupText"></div>
-    <button onclick="closePopup()">Close</button>
+    <div>You did it! 🎉</div>
+    <button onclick="window.location.href='final.html'">Continue →</button>
   </div>
 
-  <!-- Continue Button -->
-  <button class="continue-btn" onclick="window.location.href='puzzle.html'">Continue →</button>
-
   <script>
-    const messages = [
-      "Sealed with a heartbeat.",
-      "Where words turn into feelings.",
-      "A secret only for you.",
-      "Love, quietly waiting.",
-      "This silence says it all."
-    ];
-    const letters = document.querySelectorAll('.letter');
+    const container = document.getElementById('puzzle');
     const popup = document.getElementById('popup');
-    const popupText = document.getElementById('popupText');
 
-    letters.forEach((letter, index) => {
-      letter.addEventListener('click', () => {
-        popupText.textContent = messages[index];
-        popup.style.display = 'block';
-      });
+    // Generate positions for 3x3 grid
+    const positions = [];
+    for (let row = 0; row < 3; row++) {
+      for (let col = 0; col < 3; col++) {
+        positions.push({ x: col * -100, y: row * -100 });
+      }
+    }
+
+    // Shuffle positions array
+    shuffle(positions);
+
+    // Create pieces
+    positions.forEach((pos, index) => {
+      const piece = document.createElement('div');
+      piece.className = 'piece';
+      piece.style.backgroundPosition = ${pos.x}px ${pos.y}px;
+      piece.setAttribute('data-pos', index); 
+      piece.draggable = true;
+      container.appendChild(piece);
     });
 
-    function closePopup() {
-      popup.style.display = 'none';
+    let draggedPiece = null;
+    container.addEventListener('dragstart', e => {
+      draggedPiece = e.target;
+    });
+    container.addEventListener('dragover', e => e.preventDefault());
+    container.addEventListener('drop', e => {
+      e.preventDefault();
+      if (e.target.classList.contains('piece') && e.target !== draggedPiece) {
+        const tempPos = draggedPiece.style.backgroundPosition;
+        draggedPiece.style.backgroundPosition = e.target.style.backgroundPosition;
+        e.target.style.backgroundPosition = tempPos;
+
+        checkWin();
+      }
+    });
+
+    function checkWin() {
+      const pieces = document.querySelectorAll('.piece');
+      let correctCount = 0;
+      pieces.forEach((piece, index) => {
+        const correctX = (index % 3) * -100;
+        const correctY = Math.floor(index / 3) * -100;
+        if (piece.style.backgroundPosition === ${correctX}px ${correctY}px) {
+          correctCount++;
+        }
+      });
+      if (correctCount === 9) popup.style.display = 'block';
+    }
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
     }
   </script>
 </body>
