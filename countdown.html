@@ -3,106 +3,165 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Solve the Puzzle</title>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <title>Heart Catcher</title>
   <style>
     body {
       margin: 0;
-      padding: 0;
-      background: linear-gradient(135deg, #fdf6ec, #f3e5d0);
-      font-family: 'Dancing Script', cursive;
+      height: 100vh;
+      background: linear-gradient(180deg, #f5f0e6, #fffaf4);
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
-      height: 100vh;
+      justify-content: center;
+      font-family: 'Poppins', sans-serif;
     }
-    h1 {
-      margin-top: 40px;
-      font-size: 2.5rem;
-      color: #6a4e23;
-    }
-    .puzzle-wrapper {
+
+    #gameArea {
       position: relative;
-      width: 300px;
-      height: 300px;
-      margin-top: 40px;
-      border-radius: 10px;
+      width: 400px;
+      height: 500px;
+      background: #fffaf4;
+      border: 3px solid #d2b48c;
+      border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     }
-    .puzzle-wrapper img {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-    .cover-tile {
+
+    .heart {
       position: absolute;
-      width: calc(100% / 3);
-      height: calc(100% / 3);
-      background: rgba(0,0,0,0.8);
-      transition: opacity 0.5s ease;
+      font-size: 30px;
+      animation: fall 4s linear forwards;
+    }
+
+    @keyframes fall {
+      0% { top: -40px; }
+      100% { top: 500px; }
+    }
+
+    .basket {
+      position: absolute;
+      bottom: 10px;
+      left: 170px;
+      font-size: 40px;
+      transition: left 0.2s ease;
+    }
+
+    #controls {
+      margin-top: 15px;
+    }
+    .arrowBtn {
+      background: #d2b48c;
+      border: none;
+      color: white;
+      font-size: 20px;
+      margin: 0 8px;
+      padding: 10px 20px;
+      border-radius: 10px;
       cursor: pointer;
     }
-    .popup {
-      position: fixed;
+    .arrowBtn:hover {
+      background: #c1a177;
+    }
+
+    /* Pop-up */
+    #popup {
+      display: none;
+      position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: #ffffff;
-      padding: 30px 40px;
-      border-radius: 10px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-      display: none;
+      background: rgba(245,240,230,0.95);
+      border: 2px solid #d2b48c;
+      padding: 30px 50px;
+      border-radius: 20px;
       text-align: center;
-      font-size: 1.5rem;
-      color: #6a4e23;
+      box-shadow: 0px 4px 20px rgba(0,0,0,0.2);
       z-index: 10;
     }
-    .popup button {
+    #popup button {
       margin-top: 15px;
       padding: 10px 20px;
       border: none;
-      background: #6a4e23;
+      border-radius: 10px;
+      background: #d2b48c;
       color: white;
-      font-size: 1rem;
-      border-radius: 5px;
+      font-size: 16px;
       cursor: pointer;
+    }
+    #popup button:hover {
+      background: #c1a177;
     }
   </style>
 </head>
 <body>
-  <h1>SOLVE THE PUZZLE</h1>
-  <div class="puzzle-wrapper" id="puzzle">
-    <img src="puzzlepic.jpeg" alt="Puzzle Image">
+  <div id="gameArea">
+    <div class="basket" id="basket">🧺</div>
+    <div id="popup">
+      <h2>You collected all ❤</h2>
+      <button onclick="goToFinal()">Continue</button>
+    </div>
   </div>
-
-  <div class="popup" id="popup">
-    <div>You did it! 🎉</div>
-    <button onclick="window.location.href='final.html'">Continue →</button>
+  <div id="controls">
+    <button class="arrowBtn" onclick="moveLeft()">⬅</button>
+    <button class="arrowBtn" onclick="moveRight()">➡</button>
   </div>
 
   <script>
-    const puzzle = document.getElementById('puzzle');
+    const gameArea = document.getElementById('gameArea');
+    const basket = document.getElementById('basket');
     const popup = document.getElementById('popup');
-    let tilesLeft = 9;
+    let basketPos = 170;
+    let collected = 0;
+    const totalHearts = 5; // total falling hearts
 
-    // Generate 3x3 cover tiles
-    for (let row = 0; row < 3; row++) {
-      for (let col = 0; col < 3; col++) {
-        const tile = document.createElement('div');
-        tile.classList.add('cover-tile');
-        tile.style.top = ${(100 / 3) * row}%;
-        tile.style.left = ${(100 / 3) * col}%;
-        tile.addEventListener('click', () => {
-          tile.style.opacity = 0;
-          tile.style.pointerEvents = 'none';
-          tilesLeft--;
-          if (tilesLeft === 0) popup.style.display = 'block';
-        });
-        puzzle.appendChild(tile);
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.innerHTML = '❤';
+      heart.style.left = Math.random() * 370 + 'px';
+      gameArea.appendChild(heart);
+
+      let fallInterval = setInterval(() => {
+        let heartTop = parseInt(window.getComputedStyle(heart).top);
+        let heartLeft = parseInt(window.getComputedStyle(heart).left);
+        let basketLeft = basketPos;
+        let basketRight = basketPos + 40;
+
+        if (heartTop > 450 && heartLeft > basketLeft - 10 && heartLeft < basketRight + 40) {
+          heart.remove();
+          collected++;
+          clearInterval(fallInterval);
+          if (collected === totalHearts) {
+            setTimeout(() => popup.style.display = 'block', 300);
+          }
+        } 
+        else if (heartTop > 480) {
+          heart.remove();
+          clearInterval(fallInterval);
+        }
+      }, 50);
+    }
+
+    function startGame() {
+      for (let i = 0; i < totalHearts; i++) {
+        setTimeout(createHeart, i * 1500);
       }
     }
+
+    function moveLeft() {
+      basketPos = Math.max(basketPos - 30, 0);
+      basket.style.left = basketPos + 'px';
+    }
+    function moveRight() {
+      basketPos = Math.min(basketPos + 30, 360);
+      basket.style.left = basketPos + 'px';
+    }
+
+    function goToFinal() {
+      window.location.href = 'final.html';
+    }
+
+    startGame();
   </script>
 </body>
 </html>
