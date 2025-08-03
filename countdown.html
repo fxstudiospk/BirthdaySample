@@ -16,6 +16,18 @@
       font-family: 'Poppins', sans-serif;
     }
 
+    h2#instructions {
+      font-size: 18px;
+      margin-bottom: 10px;
+      padding: 8px 16px;
+      border-radius: 20px;
+      background: rgba(210, 180, 140, 0.2);
+      color: #8b6d3a;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+
     #gameArea {
       position: relative;
       width: 400px;
@@ -31,6 +43,7 @@
       position: absolute;
       font-size: 30px;
       animation: fall 4s linear forwards;
+      color: #e75480;
     }
 
     @keyframes fall {
@@ -43,24 +56,7 @@
       bottom: 10px;
       left: 170px;
       font-size: 40px;
-      transition: left 0.2s ease;
-    }
-
-    #controls {
-      margin-top: 15px;
-    }
-    .arrowBtn {
-      background: #d2b48c;
-      border: none;
-      color: white;
-      font-size: 20px;
-      margin: 0 8px;
-      padding: 10px 20px;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-    .arrowBtn:hover {
-      background: #c1a177;
+      transition: left 0.15s ease-in-out;
     }
 
     /* Pop-up */
@@ -94,6 +90,7 @@
   </style>
 </head>
 <body>
+  <h2 id="instructions">Collect hearts using Arrow Keys or Swipe!</h2>
   <div id="gameArea">
     <div class="basket" id="basket">🧺</div>
     <div id="popup">
@@ -101,18 +98,16 @@
       <button onclick="goToFinal()">Continue</button>
     </div>
   </div>
-  <div id="controls">
-    <button class="arrowBtn" onclick="moveLeft()">⬅</button>
-    <button class="arrowBtn" onclick="moveRight()">➡</button>
-  </div>
 
   <script>
     const gameArea = document.getElementById('gameArea');
     const basket = document.getElementById('basket');
     const popup = document.getElementById('popup');
+
     let basketPos = 170;
     let collected = 0;
-    const totalHearts = 5; // total falling hearts
+    const totalHearts = 30;  // total falling hearts
+    const targetCollect = 8; // required to win
 
     function createHeart() {
       const heart = document.createElement('div');
@@ -122,20 +117,19 @@
       gameArea.appendChild(heart);
 
       let fallInterval = setInterval(() => {
-        let heartTop = parseInt(window.getComputedStyle(heart).top);
-        let heartLeft = parseInt(window.getComputedStyle(heart).left);
-        let basketLeft = basketPos;
-        let basketRight = basketPos + 40;
+        const heartTop = parseInt(window.getComputedStyle(heart).top);
+        const heartLeft = parseInt(window.getComputedStyle(heart).left);
+        const basketLeft = basketPos;
+        const basketRight = basketPos + 40;
 
         if (heartTop > 450 && heartLeft > basketLeft - 10 && heartLeft < basketRight + 40) {
           heart.remove();
           collected++;
           clearInterval(fallInterval);
-          if (collected === totalHearts) {
+          if (collected === targetCollect) {
             setTimeout(() => popup.style.display = 'block', 300);
           }
-        } 
-        else if (heartTop > 480) {
+        } else if (heartTop > 480) {
           heart.remove();
           clearInterval(fallInterval);
         }
@@ -144,9 +138,15 @@
 
     function startGame() {
       for (let i = 0; i < totalHearts; i++) {
-        setTimeout(createHeart, i * 1500);
+        setTimeout(createHeart, i * 1000);
       }
     }
+
+    // Keyboard Controls
+    window.addEventListener('keydown', (e) => {
+      if (e.key === "ArrowLeft") moveLeft();
+      if (e.key === "ArrowRight") moveRight();
+    });
 
     function moveLeft() {
       basketPos = Math.max(basketPos - 30, 0);
@@ -156,6 +156,21 @@
       basketPos = Math.min(basketPos + 30, 360);
       basket.style.left = basketPos + 'px';
     }
+
+    // Swipe Controls (for mobile)
+    let touchStartX = null;
+    gameArea.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].clientX;
+    });
+
+    gameArea.addEventListener('touchend', (e) => {
+      const touchEndX = e.changedTouches[0].clientX;
+      if (touchStartX && Math.abs(touchEndX - touchStartX) > 30) {
+        if (touchEndX < touchStartX) moveLeft();
+        else moveRight();
+      }
+      touchStartX = null;
+    });
 
     function goToFinal() {
       window.location.href = 'final.html';
