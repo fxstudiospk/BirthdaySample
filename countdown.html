@@ -1,19 +1,60 @@
-<div id="countdown" style="font-size:1.3rem; margin:10px 0; font-weight:600; color:#6a4e93;">
-  Loading...
-</div>
-<script>
-  const countdown = document.getElementById('countdown');
-  const targetDate = new Date('August 25, 2025 00:00:00').getTime();
-  function updateCountdown() {
-    const now = new Date().getTime();
-    const distance = targetDate - now;
-    if (distance <= 0) { countdown.textContent = "Happy Birthday! 🎉"; return; }
-    const d = Math.floor(distance/(1000*60*60*24));
-    const h = Math.floor((distance%(1000*60*60*24))/(1000*60*60));
-    const m = Math.floor((distance%(1000*60*60))/(1000*60));
-    const s = Math.floor((distance%(1000*60))/1000);
-    countdown.textContent = ${d} Days ${h}:${m}:${s};
-  }
-  setInterval(updateCountdown, 1000);
-  updateCountdown();
-</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Countdown</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+      color: #000000;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+    #countdown {
+      font-size: 2rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Countdown to 14 August</h1>
+  <div id="countdown">Loading...</div>
+
+  <script>
+    const countdown = document.getElementById('countdown');
+    const targetDate = new Date('August 14, 2025 00:00:00').getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance <= 0) {
+        countdown.textContent = "It's 14 August! 🎉";
+        return;
+      }
+
+      const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((distance % (1000 * 60)) / 1000);
+
+      countdown.textContent = ${d} Days ${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')};
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
+</body>
+</html>
