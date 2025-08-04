@@ -11,6 +11,9 @@
       background: #F9F5FF;
       font-family: 'Segoe UI', sans-serif;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     /* Stylish WELCOME */
@@ -28,23 +31,25 @@
     }
 
     .profile-pic {
-      width: 120px;
-      height: 120px;
+      width: 180px;
+      height: 180px;
       border-radius: 50%;
       object-fit: cover;
       display: block;
-      margin: 30px auto 40px auto;
-      box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+      margin: 40px auto 50px auto;
+      box-shadow: 0px 4px 12px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 2; /* DP upar rahe */
     }
 
     .container {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
-      height: auto;
+      gap: 20px;
+      margin-top: 20px;
       position: relative;
-      z-index: 1;
+      z-index: 2; /* DP aur box hearts ke upar */
     }
 
     .password-box {
@@ -53,7 +58,7 @@
       border: 2px solid #8E44AD;
       border-radius: 8px;
       padding: 10px;
-      width: 250px;
+      width: 260px;
       background: white;
     }
 
@@ -71,7 +76,6 @@
     }
 
     .error {
-      margin-top: 10px;
       font-size: 16px;
       color: red;
       display: none;
@@ -79,7 +83,7 @@
     }
 
     .continue-btn {
-      margin-top: 30px;
+      margin-top: 10px;
       background: #8E44AD;
       color: white;
       border: none;
@@ -139,13 +143,20 @@
       }
     }
 
-    // Falling emojis (only 💕, slower frequency)
+    // Falling emojis (only 💕) avoiding DP area
     const emojis = ["💕"];
     function createEmoji() {
       const emoji = document.createElement("div");
       emoji.classList.add("emoji");
       emoji.innerText = emojis[0];
-      emoji.style.left = Math.random() * window.innerWidth + "px";
+
+      // Random X but avoid DP area (center width ~180px)
+      let randomX;
+      do {
+        randomX = Math.random() * window.innerWidth;
+      } while (randomX > window.innerWidth/2 - 100 && randomX < window.innerWidth/2 + 100);
+
+      emoji.style.left = randomX + "px";
       document.body.appendChild(emoji);
 
       let position = -50;
@@ -164,7 +175,8 @@
       fall();
     }
 
-    setInterval(createEmoji, 1000); // frequency slow
+    // frequency slower (1000ms)
+    setInterval(createEmoji, 1000);
   </script>
 </body>
 </html>
