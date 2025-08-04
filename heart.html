@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Perfect Heart Animation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
@@ -20,15 +21,14 @@
     h1 {
       position: absolute;
       top: 40px;
-      font-size: 26px;
-      font-weight: bold;
+      font-size: 32px;
+      font-family: 'Great Vibes', cursive;
       text-align: center;
       letter-spacing: 2px;
       background: linear-gradient(90deg, #9b59b6, #8e44ad, #732d91);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      font-family: 'Brush Script MT', cursive;
-      text-shadow: 0px 2px 4px rgba(0,0,0,0.2);
+      text-shadow: 0px 3px 5px rgba(0,0,0,0.2);
     }
 
     canvas { display: block; }
@@ -72,11 +72,11 @@
     const numParticles = 1500;
     const scale = 15;
 
-    // evenly distribute particles on heart path
+    // evenly spaced along heart path
     function generateHeartPoints() {
       heartPoints.length = 0;
       for (let i = 0; i < numParticles; i++) {
-        const t = (i / numParticles) * Math.PI * 2; // evenly spaced
+        const t = Math.random() * Math.PI * 2; // still random but dense
         const x = 16 * Math.pow(Math.sin(t), 3);
         const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
         heartPoints.push({
@@ -127,7 +127,6 @@
       document.getElementById("continueBtn").style.opacity = 1;
     }, 2500);
 
-    // Redirect on button click
     document.getElementById("continueBtn").addEventListener("click", () => {
       window.location.href = "wish.html";
     });
