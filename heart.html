@@ -13,17 +13,22 @@
       align-items: center;
       height: 100vh;
       overflow: hidden;
-      font-family: 'Arial', sans-serif;
+      font-family: 'Segoe UI', sans-serif;
     }
 
+    /* Stylish heading */
     h1 {
       position: absolute;
       top: 40px;
-      font-size: 20px;
+      font-size: 26px;
       font-weight: bold;
-      color: #8E44AD;
       text-align: center;
       letter-spacing: 2px;
+      background: linear-gradient(90deg, #9b59b6, #8e44ad, #732d91);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-family: 'Brush Script MT', cursive;
+      text-shadow: 0px 2px 4px rgba(0,0,0,0.2);
     }
 
     canvas { display: block; }
@@ -49,7 +54,7 @@
   </style>
 </head>
 <body>
-  <h1>VISUAL REPRESENTATION OF HOW YOU COMPLETE ME</h1>
+  <h1>Visual Representation of How You Complete Me</h1>
   <canvas id="canvas"></canvas>
   <button id="continueBtn">Continue →</button>
 
@@ -64,13 +69,14 @@
 
     const particles = [];
     const heartPoints = [];
-    const numParticles = 1500;  // increased from 1200 → 1500
+    const numParticles = 1500;
     const scale = 15;
 
+    // evenly distribute particles on heart path
     function generateHeartPoints() {
       heartPoints.length = 0;
       for (let i = 0; i < numParticles; i++) {
-        const t = Math.random() * Math.PI * 2;
+        const t = (i / numParticles) * Math.PI * 2; // evenly spaced
         const x = 16 * Math.pow(Math.sin(t), 3);
         const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
         heartPoints.push({
@@ -82,11 +88,11 @@
     generateHeartPoints();
 
     class Particle {
-      constructor() {
+      constructor(target) {
         this.x = Math.random() * width;
         this.y = Math.random() * height;
-        this.target = heartPoints[Math.floor(Math.random() * heartPoints.length)];
-        this.size = 1.8;  // slightly smaller for clean shape
+        this.target = target;
+        this.size = 1.8;
         this.color = "#e63946";
         this.speed = 0.05 + Math.random() * 0.05;
       }
@@ -102,7 +108,9 @@
       }
     }
 
-    for (let i = 0; i < numParticles; i++) particles.push(new Particle());
+    for (let i = 0; i < heartPoints.length; i++) {
+      particles.push(new Particle(heartPoints[i]));
+    }
 
     function animate() {
       ctx.clearRect(0, 0, width, height);
