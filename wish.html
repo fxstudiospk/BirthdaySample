@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />  
   <title>Happy Birthday</title>  
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   <style>  
     body {  
       margin: 0;  
@@ -27,19 +28,17 @@
       100% { transform: translateX(-30px); }  
     }  
     .flag {  
-      background: linear-gradient(90deg, #9b59b6, #8e44ad, #732d91); /* Purple gradient */  
-      color: #ffffff; /* White letters */  
-      font-size: 28px;  
-      font-weight: bold;  
+      background: linear-gradient(90deg, #9b59b6, #8e44ad, #732d91);  
+      color: #ffffff;  
+      font-size: 30px;  
+      font-family: 'Pacifico', cursive;  /* Stylish but readable */  
       padding: 20px 15px 35px 15px;  
       margin: 0 5px;  
-      position: relative;  
       text-align: center;  
-      font-family: 'Brush Script MT', cursive; /* Noted style font */  
       clip-path: polygon(0 0, 100% 0, 100% 80%, 50% 100%, 0 80%);  
       box-shadow: 0 4px 10px rgba(0,0,0,0.5);  
-      text-shadow: 0px 3px 5px rgba(0,0,0,0.2); /* Similar shadow as noted */  
-      letter-spacing: 2px;  
+      letter-spacing: 1px;  
+      text-shadow: 0px 2px 4px rgba(0,0,0,0.2);  
     }  
   
     /* Cake */  
@@ -61,8 +60,8 @@
       transform: translateX(-50%);  
       font-size: 100px;  
       font-weight: bold;  
-      color: #9b59b6;  
-      text-shadow: 0 0 15px #8E44AD, 0 0 25px #9B59B6, 0 0 40px #732d91; /* Glowy purple */  
+      color: #8E44AD;   
+      text-shadow: 0 0 8px rgba(155, 89, 182, 0.6); /* Soft subtle glow */  
       z-index: 6;  
     }  
   
@@ -103,7 +102,6 @@
   <div class="banner" id="banner"></div>  
   <div class="age">20</div>  
   <div class="cake">🎂</div>  
-  <!-- Updated Button -->  
   <button class="continue-btn" onclick="window.location.href='letter.html'">  
     Continue →  
   </button>  
