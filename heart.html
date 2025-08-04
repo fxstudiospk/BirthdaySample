@@ -64,8 +64,8 @@
 
     const particles = [];
     const heartPoints = [];
-    const numParticles = 1200; 
-    const scale = 15; 
+    const numParticles = 1500;  // increased from 1200 → 1500
+    const scale = 15;
 
     function generateHeartPoints() {
       heartPoints.length = 0;
@@ -86,7 +86,7 @@
         this.x = Math.random() * width;
         this.y = Math.random() * height;
         this.target = heartPoints[Math.floor(Math.random() * heartPoints.length)];
-        this.size = 2;
+        this.size = 1.8;  // slightly smaller for clean shape
         this.color = "#e63946";
         this.speed = 0.05 + Math.random() * 0.05;
       }
@@ -114,7 +114,7 @@
     }
     animate();
 
-    // Show continue button after particles settle (~2s)
+    // Show continue button after particles settle (~2.5s)
     setTimeout(() => {
       document.getElementById("continueBtn").style.opacity = 1;
     }, 2500);
