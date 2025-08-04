@@ -16,15 +16,15 @@
     /* Stylish WELCOME */
     h1 {
       text-align: center;
-      font-weight: 900;
       margin-top: 30px;
-      font-size: 40px;
+      font-size: 48px;
+      font-weight: 900;
+      font-family: 'Brush Script MT', cursive;
       background: linear-gradient(90deg, #9b59b6, #8e44ad, #732d91);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      font-family: 'Brush Script MT', cursive;
-      letter-spacing: 4px;
-      text-shadow: 0px 2px 4px rgba(0,0,0,0.2);
+      text-shadow: 0 3px 5px rgba(0,0,0,0.2);
+      letter-spacing: 3px;
     }
 
     .profile-pic {
@@ -164,8 +164,7 @@
       fall();
     }
 
-    // frequency slower (1000ms)
-    setInterval(createEmoji, 1000);
+    setInterval(createEmoji, 1000); // frequency slow
   </script>
 </body>
 </html>
