@@ -13,19 +13,36 @@
       overflow: hidden;
     }
 
+    /* Stylish WELCOME */
     h1 {
       text-align: center;
-      font-weight: bold;
+      font-weight: 900;
       margin-top: 30px;
-      color: #8E44AD;
+      font-size: 40px;
+      background: linear-gradient(90deg, #9b59b6, #8e44ad, #732d91);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-family: 'Brush Script MT', cursive;
+      letter-spacing: 4px;
+      text-shadow: 0px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .profile-pic {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      margin: 30px auto 40px auto;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
     }
 
     .container {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      height: 70vh;
+      justify-content: flex-start;
+      height: auto;
       position: relative;
       z-index: 1;
     }
@@ -62,7 +79,7 @@
     }
 
     .continue-btn {
-      margin-top: 30px; /* increased spacing */
+      margin-top: 30px;
       background: #8E44AD;
       color: white;
       border: none;
@@ -91,7 +108,10 @@
   </style>
 </head>
 <body>
-  <h1>This website is created for Avinash</h1>
+  <h1>WELCOME</h1>
+
+  <!-- DP image -->
+  <img src="songpic.jpeg" alt="Profile Picture" class="profile-pic">
 
   <div class="container">
     <div class="password-box">
@@ -119,12 +139,12 @@
       }
     }
 
-    // Falling emojis (💕 🌺)
-    const emojis = ["💕", "🌺"];
+    // Falling emojis (only 💕, slower frequency)
+    const emojis = ["💕"];
     function createEmoji() {
       const emoji = document.createElement("div");
       emoji.classList.add("emoji");
-      emoji.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+      emoji.innerText = emojis[0];
       emoji.style.left = Math.random() * window.innerWidth + "px";
       document.body.appendChild(emoji);
 
@@ -144,7 +164,8 @@
       fall();
     }
 
-    setInterval(createEmoji, 500);
+    // frequency slower (1000ms)
+    setInterval(createEmoji, 1000);
   </script>
 </body>
 </html>
