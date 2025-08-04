@@ -5,22 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>For Avinash</title>
   <style>
-    body {
+    html, body {
       margin: 0;
       padding: 0;
       background: #f9f4ef;
       font-family: 'Segoe UI', sans-serif;
-      overflow-x: hidden;
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center; /* center vertically */
+      overflow: hidden;
     }
 
     /* Stylish WELCOME */
     h1 {
       text-align: center;
-      margin-top: 5vh;
-      font-size: clamp(28px, 6vw, 48px);
+      font-size: clamp(32px, 7vw, 50px);
       font-weight: 900;
       font-family: 'Brush Script MT', cursive;
       background: linear-gradient(90deg, #9b59b6, #8e44ad, #732d91);
@@ -28,17 +33,18 @@
       -webkit-text-fill-color: transparent;
       text-shadow: 0 3px 5px rgba(0,0,0,0.2);
       letter-spacing: 3px;
+      margin-bottom: 4vh;
       padding: 0 5%;
       box-sizing: border-box;
     }
 
     .profile-pic {
-      width: clamp(120px, 30vw, 180px);
-      height: clamp(120px, 30vw, 180px);
+      width: clamp(130px, 35vw, 200px);
+      height: clamp(130px, 35vw, 200px);
       border-radius: 50%;
       object-fit: cover;
       display: block;
-      margin: 5vh auto 6vh auto;
+      margin-bottom: 5vh;
       box-shadow: 0px 4px 12px rgba(0,0,0,0.3);
       position: relative;
       z-index: 2;
@@ -48,10 +54,9 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 20px;
+      gap: 15px;
       width: 90%;
       max-width: 320px;
-      margin-top: 2vh;
       position: relative;
       z-index: 2;
     }
@@ -71,12 +76,12 @@
       flex: 1;
       border: none;
       outline: none;
-      font-size: clamp(14px, 3.5vw, 16px);
+      font-size: clamp(15px, 4vw, 18px);
     }
 
     .lock-icon {
       margin-left: 8px;
-      font-size: clamp(16px, 4vw, 18px);
+      font-size: clamp(18px, 4.5vw, 20px);
       color: #8E44AD;
     }
 
@@ -89,12 +94,11 @@
     }
 
     .continue-btn {
-      margin-top: 10px;
       background: #8E44AD;
       color: white;
       border: none;
-      padding: 10px 20px;
-      font-size: clamp(14px, 4vw, 16px);
+      padding: 12px 25px;
+      font-size: clamp(15px, 4vw, 18px);
       border-radius: 6px;
       cursor: pointer;
       display: flex;
@@ -111,15 +115,16 @@
     .emoji {
       position: absolute;
       top: -50px;
-      font-size: clamp(24px, 6vw, 40px);
+      font-size: clamp(28px, 7vw, 40px);
       pointer-events: none;
       z-index: 0;
     }
 
-    @media (max-width: 480px) {
-      .container {
-        gap: 15px;
-      }
+    /* For smaller phones specifically */
+    @media (max-height: 600px) {
+      h1 { font-size: clamp(28px, 6vw, 40px); margin-bottom: 2vh; }
+      .profile-pic { width: clamp(110px, 30vw, 160px); height: clamp(110px, 30vw, 160px); margin-bottom: 4vh; }
+      .container { gap: 10px; }
     }
   </style>
 </head>
