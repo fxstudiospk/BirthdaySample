@@ -31,7 +31,7 @@
       background: linear-gradient(90deg, #9b59b6, #8e44ad, #732d91);  
       color: #ffffff;  
       font-size: 30px;  
-      font-family: 'Pacifico', cursive;  /* Stylish but readable */  
+      font-family: 'Pacifico', cursive;  
       padding: 20px 15px 35px 15px;  
       margin: 0 5px;  
       text-align: center;  
@@ -52,16 +52,22 @@
       z-index: 5;  
     }  
   
-    /* Age */  
+    /* Age (Stylish) */  
     .age {  
       position: absolute;  
       top: 28%;  
       left: 50%;  
       transform: translateX(-50%);  
-      font-size: 100px;  
+      font-size: 120px;  
       font-weight: bold;  
-      color: #8E44AD;   
-      text-shadow: 0 0 8px rgba(155, 89, 182, 0.6); /* Soft subtle glow */  
+      background: linear-gradient(45deg, #8E44AD, #C39BD3, #9B59B6);  
+      -webkit-background-clip: text;  
+      -webkit-text-fill-color: transparent;  
+      text-shadow: 
+        2px 2px 0px #5E3370, 
+        4px 4px 10px rgba(0,0,0,0.4);  
+      letter-spacing: 2px;  
+      font-family: 'Pacifico', cursive;  
       z-index: 6;  
     }  
   
